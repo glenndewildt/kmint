@@ -26,7 +26,7 @@ file(GLOB_RECURSE APP_SOURCES
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${INCLUDE_DIRS})
 
 # Add project executable and link with SDL
-add_executable(${PROJECT_NAME} ${APP_HEADERS} ${APP_SOURCES} src/file_reader.cpp src/file_reader.h src/board_drawable.cpp src/board_drawable.h include/Movable_objects/Cow/Cow.cpp include/Movable_objects/Cow/Cow.h include/Movable_objects/Bunny.cpp include/Movable_objects/Bunny.h)
+add_executable(${PROJECT_NAME} ${APP_HEADERS} ${APP_SOURCES} src/file_reader.cpp src/file_reader.h src/board_drawable.cpp src/board_drawable.h include/Movable_objects/Cow/Cow.cpp include/Movable_objects/Cow/Cow.h include/Movable_objects/Bunny/Bunny.cpp include/Movable_objects/Bunny/Bunny.h a_star/a_star.cpp a_star/a_star.h)
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 
 # Copy assets to build directory
