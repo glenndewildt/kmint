@@ -17,22 +17,21 @@ int main() {
         kmint::graph g { kmint::point{0.0f, 0.0f} };
         g.fill(f);
 
-
-
-
         kmint::base_systems base {};
         kmint::board s {};
-        kmint::background b { kmint::image { "resources/Sand.png" } };
-        kmint::graph_bound_board_piece hare { g, 1000, kmint::image { "resources/hare.png", 0.33f } };
-         kmint::Cow cow{ g, 0, kmint::image { "resources/cow.png", 0.25f }};
-        kmint::Bunny t{ kmint::point{10,10},kmint::image { "resources/cow.png", 0.25f }};
+        kmint::background b { kmint::image { "resources/Graph.png" } };
+        kmint::graph_bound_board_piece rabbit { g, 1000, kmint::image { "resources/bunnelby.png", 0.33f } };
+        kmint::graph_bound_board_piece meneer { g, 1000, kmint::image { "resources/meneerjanssen.png", 0.33f } };
+        kmint::graph_bound_board_piece mevrouw { g, 1000, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
+        kmint::Cow sheep{ g, 0, kmint::image { "resources/poochyena.png", 0.25f }};
+        //kmint::Bunny t{ kmint::point{10,10},kmint::image { "resources/cow.png", 0.25f }};
 
         s.add_board_piece(b);
         s.add_board_piece(g);
-        s.add_board_piece(cow);
-        s.add_board_piece(t);
-        s.add_board_piece(hare);
-            hare.update(10);
+        s.add_board_piece(sheep);
+        //s.add_board_piece(t);
+        s.add_board_piece(meneer);
+        meneer.update(10);
 
 
         s.play();
