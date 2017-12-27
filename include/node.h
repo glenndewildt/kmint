@@ -4,6 +4,7 @@
 #include <vector>
 #include "point.h"
 #include "edge.h"
+#include "color.h"
 
 namespace kmint {
     class node {
@@ -11,8 +12,11 @@ namespace kmint {
         int _id;
         int type;
         std::vector<edge> _edges;
+
     public:
-        node(point location, int id) : _location {location}, _id {id}, _edges {} {}
+        color _color;
+
+        node(point location, int id) : _location {location}, _id {id}, _edges {}, _color{ 0xff, 0x00, 0x00 }  {}
         int id() const noexcept { return _id; }
         point location() const noexcept { return _location; }
         void add_edge(edge e) { _edges.push_back(e); }

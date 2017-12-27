@@ -37,8 +37,9 @@ namespace kmint {
 
         // draw nodes
 
-        r.set_color(color { 0xff, 0x00, 0x00 } );
         for(const auto &n : get_graph()) {
+            r.set_color(n._color);
+
             auto x = graph_loc.x() + n.location().x();
             auto y = graph_loc.y() + n.location().y();
 

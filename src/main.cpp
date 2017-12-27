@@ -26,11 +26,15 @@ int main() {
         kmint::graph_bound_board_piece mevrouw { g, 1000, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
         kmint::Cow sheep{ g, 0, kmint::image { "resources/poochyena.png", 0.25f }};
         //kmint::Bunny t{ kmint::point{10,10},kmint::image { "resources/cow.png", 0.25f }};
+        kmint::a_star search;
+        kmint::node start = g[10];
+        kmint::node end = g[1000];
 
+
+        search.search(&g,&start, &end);
         s.add_board_piece(b);
         s.add_board_piece(g);
-        kmint::a_star search;
-        search.search(g,g[10],g[100]);
+
         s.add_board_piece(sheep);
         //s.add_board_piece(t);
         s.add_board_piece(meneer);
