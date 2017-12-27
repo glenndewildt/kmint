@@ -18,7 +18,8 @@ namespace kmint {
     class base_systems {
     public:
         base_systems();
-        ~base_systems();
+        ~base_systems(
+        );
     };
     
 
