@@ -10,6 +10,7 @@
 #include <Movable_objects/Cow/Cow.h>
 #include <Movable_objects/Bunny/Bunny.h>
 #include "board_drawable.h"
+#include "../a_star/a_star.h"
 
 int main() {
     try {
@@ -32,7 +33,10 @@ int main() {
         s.add_board_piece(cow);
         s.add_board_piece(t);
         s.add_board_piece(hare);
+        kmint::a_star search;
+        search.search(g,g[10],g[100]);
             hare.update(10);
+
 
 
         s.play();

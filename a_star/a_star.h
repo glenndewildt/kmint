@@ -5,14 +5,18 @@
 #ifndef KMINTFRAMEWORK_A_STAR_H
 #define KMINTFRAMEWORK_A_STAR_H
 
-
+#include <graph.h>
+#include "node.h"
+namespace kmint {
 class a_star {
 public:
-    a_star(){};
+    a_star() {};
 
+    void search(const graph&, node, node);
 
 
 };
 
+}
 
 #endif //KMINTFRAMEWORK_A_STAR_H

@@ -18,6 +18,9 @@ namespace kmint {
         void add_edge(edge e) { _edges.push_back(e); }
         decltype(auto) begin() const noexcept { return _edges.begin(); }
         decltype(auto) end() const noexcept { return _edges.end(); }
+        const bool operator < ( const node &r ) const{
+            return ( true );
+        }
     };
 }
 

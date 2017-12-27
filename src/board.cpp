@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 
 namespace kmint {
-    board::board() : _window { "Hello World!", 1280, 720 },
+    board::board() : _window { "Hello World!", 10, 10 },
                      _renderer { _window } {}
 
     void board::play() {
