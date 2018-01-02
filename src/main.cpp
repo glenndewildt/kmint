@@ -27,7 +27,7 @@ int main() {
         kmint::Cow sheep{ g, 0, kmint::image { "resources/poochyena.png", 0.25f }};
         //kmint::Bunny t{ kmint::point{10,10},kmint::image { "resources/cow.png", 0.25f }};
         kmint::a_star search;
-        kmint::node start = g[430];
+        kmint::node start = g[445];
         kmint::node end = g[460];
 
 
