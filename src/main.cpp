@@ -9,6 +9,7 @@
 #include <fstream>
 #include <Movable_objects/Cow/Cow.h>
 #include <Movable_objects/Bunny/Bunny.h>
+#include <circle.h>
 #include "board_drawable.h"
 #include "../a_star/a_star.h"
 
@@ -30,6 +31,7 @@ int main() {
         kmint::node start = g[445];
         kmint::node end = g[460];
 
+        kmint::circle radius { rabbit, 20 };
 
         search.search(&g,start, end);
         s.add_board_piece(b);
@@ -37,10 +39,8 @@ int main() {
 
         s.add_board_piece(sheep);
         //s.add_board_piece(t);
-        s.add_board_piece(meneer);
-        meneer.update(10);
-
-
+        s.add_board_piece(rabbit);
+        rabbit.update(10);
 
         s.play();
     }
