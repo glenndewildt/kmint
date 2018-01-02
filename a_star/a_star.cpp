@@ -11,7 +11,7 @@
 
 namespace kmint {
 
-    void a_star::search( graph* begin, node *start, node *end) {
+    void a_star::search( graph* begin, node start, node end) {
         std::unordered_map<int, int> dist;
 
         for (auto& j:*begin) {
@@ -20,11 +20,11 @@ namespace kmint {
         }
 
         std::set<std::pair<int, node>> s;
-        int current_node_id = start->id();
+        int current_node_id = start.id();
 
-        s.insert(std::make_pair(0, *start));
+        s.insert(std::make_pair(0, start));
 
-        while (current_node_id != end->id()) {
+        while (current_node_id != end.id()) {
             // find the pair at the front
             auto p = *(s.begin());
             auto node = p.second;
@@ -45,7 +45,8 @@ namespace kmint {
 
             for (auto& childpair:node) {
                 auto var = dist[childpair.from().id()];
-                if (node_distance + childpair.weight() < dist[childpair.to().id()]) {
+                int d = (int)sqrt(pow(childpair.to().location().x() - end.location().x(), 2) + pow(childpair.to().location().y() - end.location().y(), 2));
+                if (node_distance + childpair.weight()+d < dist[childpair.to().id()]) {
 
                     // set update is not possible of node
                     // we remove the old pair
@@ -56,7 +57,9 @@ namespace kmint {
                     }
                     // insert new pair
                     dist[dest.id()] = node_distance + childpair.weight();
-                    s.insert(std::make_pair(dist[dest.id()], dest));
+
+
+                    s.insert(std::make_pair(dist[dest.id()]+d, dest));
 
                 }
 

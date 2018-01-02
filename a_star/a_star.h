@@ -12,7 +12,7 @@ class a_star {
 public:
     a_star() {};
 
-    void search( graph*, node*, node*);
+    void search( graph*, node, node);
 
 
 };

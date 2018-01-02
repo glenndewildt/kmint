@@ -10,7 +10,7 @@ namespace kmint {
         using coord = float;
         point() : _x{0}, _y{0} {}
         point(coord x, coord y) : _x{x}, _y{y} {}
-        coord x() const noexcept { return _x; }
+        coord x()  noexcept { return _x; }
         void x(coord newX) noexcept { _x = newX; }
         coord y() const noexcept { return _y; }
         void y(coord newY) noexcept { _y = newY; }

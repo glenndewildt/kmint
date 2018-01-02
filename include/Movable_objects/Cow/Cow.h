@@ -17,7 +17,7 @@ namespace kmint {
 
         virtual void update(float dt) {
             std::cout << "update cow" <<std::endl;
-            set_node_id({get_node_id()+1});
+            //set_node_id({get_node_id()+1});
             
 
         }
