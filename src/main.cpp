@@ -22,7 +22,11 @@ int main() {
         kmint::base_systems base {};
         kmint::board s {};
         kmint::background b { kmint::image { "resources/Graph.png" } };
-        kmint::Bunny rabbit { kmint::point { 380, 360}, kmint::image { "resources/bunnelby.png", 0.33f } };
+
+        kmint::Bunny rabbit1 { kmint::point { 380, 360}, kmint::image { "resources/bunnelby.png", 0.33f } };
+        kmint::Bunny rabbit2 { kmint::point { 120, 100}, kmint::image { "resources/bunnelby.png", 0.33f } };
+        kmint::Bunny rabbit3 { kmint::point { 850, 120}, kmint::image { "resources/bunnelby.png", 0.33f } };
+
         kmint::graph_bound_board_piece meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
         kmint::graph_bound_board_piece mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
         kmint::Cow sheep{ g, 0, kmint::image { "resources/poochyena.png", 0.25f }};
@@ -32,8 +36,6 @@ int main() {
         kmint::node end = g[460];
         //t.set_point(kmint::point{1000,100});
 
-        kmint::circle radius { rabbit, 20 };
-
         search.search(&g,start, end);
         s.add_board_piece(b);
         s.add_board_piece(g);
@@ -42,7 +44,9 @@ int main() {
 
         s.add_board_piece(sheep);
         //s.add_board_piece(t);
-        s.add_board_piece(rabbit);
+        s.add_board_piece(rabbit1);
+        s.add_board_piece(rabbit2);
+        s.add_board_piece(rabbit3);
 
         s.play();
     }
