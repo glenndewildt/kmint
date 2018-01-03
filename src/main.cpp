@@ -43,7 +43,6 @@ int main() {
         s.add_board_piece(sheep);
         //s.add_board_piece(t);
         s.add_board_piece(rabbit);
-        rabbit.update(10);
 
         s.play();
     }

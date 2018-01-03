@@ -9,6 +9,7 @@
 #include <node.h>
 #include <image_drawable.h>
 #include <linal/vector.h>
+#include <Movable_objects/Cow/Cow.h>
 
 namespace kmint {
 
@@ -19,10 +20,22 @@ namespace kmint {
         Bunny(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i } {};
         const drawable &get_drawable() const override { return _drawable; }
 
-        void update(float dt) {
+        void update(float dt, std::vector< board_piece*> _board_pieces) {
             auto curLoc = location();
-            auto vec = Linal::G2D::Vector(curLoc.x() + (1), curLoc.y() - (1));
-            set_point(kmint::point { vec.x(), vec.y() });
+            auto vec = Linal::G2D::Vector(curLoc.x(), curLoc.y());
+
+            for (auto bp : _board_pieces)
+            {
+                if (dynamic_cast<kmint::Cow*>(bp))
+                {
+                    auto targetLoc = bp->location();
+                    auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y());
+
+                    vec = (targetVec - vec).GetUnitVector();
+                }
+            }
+
+            set_point(kmint::point { vec.x() + curLoc.x(), vec.y() + curLoc.y() });
         }
     };
 }

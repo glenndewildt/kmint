@@ -15,8 +15,8 @@ namespace kmint {
         while(playing) {
             _renderer.clear();
             for(auto a : _board_pieces) {
+                a->update(1.0, _board_pieces);
                 a->get_drawable().draw(_renderer);
-                a->update(1.0);
 
                 /*if (dynamic_cast<kmint::graph_bound_board_piece*>(a))
                 {

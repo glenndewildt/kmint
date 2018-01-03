@@ -1,3 +1,4 @@
+#include <cmath>
 #include "../../include/linal/vector.h"
 
 using namespace Linal::G2D;
@@ -42,6 +43,13 @@ Vector Vector::operator/(const double& rhs)
 Vector Vector::operator/(const Vector& rhs)
 {
     return Vector(xAxis / rhs.x(), yAxis / rhs.y());
+}
+
+Vector Vector::GetUnitVector() {
+    return Vector(
+        xAxis / sqrt(pow(xAxis, 2) + pow(yAxis, 2)),
+        yAxis / sqrt(pow(xAxis, 2) + pow(yAxis, 2))
+    );
 }
 
 double Vector::x() {

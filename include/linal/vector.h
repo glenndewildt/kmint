@@ -27,6 +27,8 @@ namespace Linal
             Vector operator/(const double&);
             Vector operator/(const Vector&);
 
+            Vector GetUnitVector();
+
             double x();
             double x() const;
             double y();
