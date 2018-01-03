@@ -18,13 +18,13 @@ namespace kmint {
                 a->get_drawable().draw(_renderer);
                 a->update(1.0);
 
-                if (dynamic_cast<kmint::graph_bound_board_piece*>(a))
+                /*if (dynamic_cast<kmint::graph_bound_board_piece*>(a))
                 {
                     kmint::circle radius { *a, 500 };
                     _renderer.set_color(color(255, 0, 0, 255));
                     std::cout << "rendered cirlce";
                     radius.draw(_renderer);
-                }
+                }*/
             }
             _renderer.render();
 

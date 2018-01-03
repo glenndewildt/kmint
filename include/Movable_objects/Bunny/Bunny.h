@@ -8,6 +8,7 @@
 #include "graph_drawable.h"
 #include <node.h>
 #include <image_drawable.h>
+#include <linal/vector.h>
 
 namespace kmint {
 
@@ -18,6 +19,11 @@ namespace kmint {
         Bunny(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i } {};
         const drawable &get_drawable() const override { return _drawable; }
 
+        void update(float dt) {
+            auto curLoc = location();
+            auto vec = Linal::G2D::Vector(curLoc.x() + (1), curLoc.y() - (1));
+            set_point(kmint::point { vec.x(), vec.y() });
+        }
     };
 }
 

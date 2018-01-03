@@ -26,11 +26,11 @@ int main() {
         kmint::graph_bound_board_piece meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
         kmint::graph_bound_board_piece mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
         kmint::Cow sheep{ g, 0, kmint::image { "resources/poochyena.png", 0.25f }};
-        kmint::Bunny t{ kmint::point{10,10},kmint::image { "resources/cow.png", 0.25f }};
+        //kmint::Cow t{ kmint::point{10,10},kmint::image { "resources/cow.png", 0.25f }};
         kmint::a_star search;
         kmint::node start = g[445];
         kmint::node end = g[460];
-        t.set_point(kmint::point{1000,100});
+        //t.set_point(kmint::point{1000,100});
 
         kmint::circle radius { rabbit, 20 };
 
@@ -41,7 +41,7 @@ int main() {
         s.add_board_piece(mevrouw);
 
         s.add_board_piece(sheep);
-        s.add_board_piece(t);
+        //s.add_board_piece(t);
         s.add_board_piece(rabbit);
         rabbit.update(10);
 
