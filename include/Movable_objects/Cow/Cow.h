@@ -15,9 +15,9 @@ namespace kmint {
 
         Cow(const graph &graph, node_id nid, const image &i):graph_bound_board_piece(graph, nid, i){};
 
-        virtual void update(float dt) {
+         void update(float dt) {
             std::cout << "update cow" <<std::endl;
-            //set_node_id({get_node_id()+1});
+            set_node_id({get_node_id()+1});
             
 
         }
