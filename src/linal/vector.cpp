@@ -36,6 +36,15 @@ Vector Vector::operator*(const Vector& rhs)
 {
     return Vector(xAxis * rhs.x(), yAxis * rhs.y());
 }
+Vector& Vector::operator*=(const double & rhs) {
+    auto oldX = xAxis;
+    auto oldY = yAxis;
+
+    x(oldX);
+    y(oldY);
+
+    return *this;
+}
 Vector Vector::operator/(const double& rhs)
 {
     return Vector(xAxis / rhs, yAxis / rhs);

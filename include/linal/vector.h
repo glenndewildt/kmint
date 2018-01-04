@@ -24,6 +24,7 @@ namespace Linal
 
             Vector operator*(const double&);
             Vector operator*(const Vector&);
+            Vector& operator*=(const double&);
             Vector operator/(const double&);
             Vector operator/(const Vector&);
 
