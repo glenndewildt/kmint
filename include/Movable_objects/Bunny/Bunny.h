@@ -27,11 +27,11 @@ namespace kmint {
             std::uniform_int_distribution<int> separ(0, 1000);
             std::uniform_int_distribution<int> align(0, 1000);
 
-            attractedToSheep = (double) sheep(gen) / 1000;
-            attractedToWater = (double) water(gen) / 1000;
-            cohesion         = (double) cohes(gen) / 1000;
-            separation       = 1; //(double) separ(gen) / 1000;
-            alignment        = (double)  align(gen) / 1000;
+            attractedToSheep = ((double) sheep(gen) / 1000) +1;
+            attractedToWater = ((double) water(gen) / 1000) +1;
+            cohesion         = ((double) cohes(gen) / 1000) +1;
+            separation       = ((double) separ(gen) / 1000) +1;
+            alignment        = ((double) align(gen) / 1000) +1;
         };
         const drawable &get_drawable() const override { return _drawable; }
 
@@ -39,13 +39,19 @@ namespace kmint {
         {
             auto attSheep = GetAttractionToSheepVec(_board_pieces);
             auto attWater = GetAttractionToWater(_board_pieces);
+            auto cohes = GetCohesionVec(_board_pieces);
             auto separ = GetSeparationVec(_board_pieces);
+            auto align = GetAlignmentVec(_board_pieces);
 
-            //attSheep = attSheep.GetUnitVector() * attractedToSheep;
+            attSheep = attSheep * attractedToSheep;
+            //attWater = attWater.GetUnitVector() * attractedToWater;
+            cohes = cohes * cohesion;
+            separ = separ * separation;
+            //align = align.GetUnitVector() * alignment;
 
-            auto vec = separ.GetUnitVector();
+            auto vec = (cohes + separ + attSheep).GetUnitVector();
 
-            auto newloc = kmint::point{ vec.x() + location().x(), vec.y() + location().y() };
+            auto newloc = kmint::point{ round(vec.x()) + location().x(), round(vec.y()) + location().y() };
 
             if (newloc.x() < 10) newloc.x(10); else if (newloc.x() > 1270) newloc.x(1270);
             if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 710) newloc.y(710);
@@ -113,7 +119,45 @@ namespace kmint {
         }
 
         Linal::G2D::Vector GetCohesionVec(std::vector< board_piece*> _board_pieces) {
-            auto vec = Linal::G2D::Vector(location().x(), location().y());
+            auto loc = location();
+            auto vec = Linal::G2D::Vector(loc.x(), loc.y());
+
+            int lowestDist = 999999;
+            for (auto bp : _board_pieces)
+            {
+                if (dynamic_cast<kmint::Bunny*>(bp))
+                {
+                    auto targetLoc = bp->location();
+                    if (loc.x() == targetLoc.x() && loc.y() == targetLoc.y())
+                        continue;
+
+                    auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
+
+                    auto diffVec = targetVec - vec;
+
+                    if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < lowestDist && std::abs(diffVec.x()) + std::abs(diffVec.y()) > 44)
+                    {
+                        lowestDist = std::abs(diffVec.x()) + std::abs(diffVec.y());
+                    }
+                }
+            }
+
+            for (auto bp : _board_pieces)
+            {
+                if (dynamic_cast<kmint::Bunny*>(bp))
+                {
+                    auto targetLoc = bp->location();
+                    auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
+
+                    auto diffVec = targetVec - vec;
+                    auto diff = std::abs(diffVec.x()) + std::abs(diffVec.y());
+
+                    if (diff == lowestDist)
+                    {
+                        return (targetVec - vec);
+                    }
+                }
+            }
 
             return Linal::G2D::Vector(0, 0);
         }

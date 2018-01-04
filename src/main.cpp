@@ -51,7 +51,7 @@ int main() {
         s.add_board_piece(rabbit2);
         s.add_board_piece(rabbit3);
         s.add_board_piece(rabbit4);
-        s.add_board_piece(rabbit5);
+        //s.add_board_piece(rabbit5);
 
         s.play();
     }
