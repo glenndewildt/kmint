@@ -1,4 +1,6 @@
 #include <iostream>
+#include <random>
+#include <algorithm>
 #include <stdexcept>
 #include "base_systems.h"
 #include "board.h"
@@ -25,13 +27,6 @@ int main() {
         kmint::board s {};
         kmint::background b { kmint::image { "resources/Graph.png" } };
 
-        kmint::Bunny rabbit1 { kmint::point { 380, 360}, kmint::image { "resources/bunnelby.png", 0.33f } };
-        kmint::Bunny rabbit2 { kmint::point { 120, 100}, kmint::image { "resources/bunnelby.png", 0.33f } };
-        kmint::Bunny rabbit3 { kmint::point { 850, 120}, kmint::image { "resources/bunnelby.png", 0.33f } };
-        kmint::Bunny rabbit4 { kmint::point { 855, 122}, kmint::image { "resources/bunnelby.png", 0.33f } };
-
-        kmint::Bunny rabbit5 { kmint::point { 845, 118}, kmint::image { "resources/bunnelby.png", 0.33f } };
-
         kmint::graph_bound_board_piece meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
         kmint::graph_bound_board_piece mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
         kmint::Cow sheep{ g, 0, kmint::image { "resources/poochyena.png", 0.25f }};
@@ -53,12 +48,20 @@ int main() {
 
         s.add_board_piece(sheep);
         s.add_board_piece(t);
-        s.add_board_piece(rabbit1);
-        s.add_board_piece(rabbit2);
-        s.add_board_piece(rabbit3);
-        s.add_board_piece(rabbit4);
-        //s.add_board_piece(rabbit5);
 
+        kmint::Bunny bunny { kmint::point { 10, 20 }, kmint::image { "resources/bunnelby.png", 0.33f } };
+        //s.add_board_piece(bunny);
+
+        std::default_random_engine gen(rand());
+        std::uniform_int_distribution<int> xCord(10, 1270);
+        std::uniform_int_distribution<int> yCord(10, 690);
+
+        for (int i = 0; i < 25; i++)
+        {
+            kmint::Bunny *bunny = new kmint::Bunny { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/bunnelby.png", 0.33f } };
+            s.add_board_piece(*bunny);
+        }
+        
         s.play();
     }
     catch(const std::runtime_error &e) {

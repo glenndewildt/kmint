@@ -35,31 +35,32 @@ namespace kmint {
         };
         const drawable &get_drawable() const override { return _drawable; }
 
+        const Linal::G2D::Vector& GetVelocity() { return velocity; }
+
         void update(float dt, std::vector< board_piece*> _board_pieces)
         {
-            auto attSheep = GetAttractionToSheepVec(_board_pieces);
-            auto attWater = GetAttractionToWater(_board_pieces);
-            auto cohes = GetCohesionVec(_board_pieces);
-            auto separ = GetSeparationVec(_board_pieces);
-            auto align = GetAlignmentVec(_board_pieces);
+            auto loc = location();
 
-            attSheep = attSheep * attractedToSheep;
-            //attWater = attWater.GetUnitVector() * attractedToWater;
-            cohes = cohes * cohesion;
-            separ = separ * separation;
-            //align = align.GetUnitVector() * alignment;
+            auto sheep = GetAttractionToSheepVec(_board_pieces).GetUnitVector() * attractedToSheep;
+            auto cohes = GetCohesionVec(_board_pieces).GetUnitVector() * cohesion;
+            auto separ = GetSeparationVec(_board_pieces).GetUnitVector() * separation * 3;
+            auto align = GetAlignmentVec(_board_pieces).GetUnitVector() * alignment;
 
-            auto vec = (cohes + separ + attSheep).GetUnitVector();
+            auto vec = (sheep + cohes + separ + align).GetUnitVector();
 
-            auto newloc = kmint::point{ round(vec.x()) + location().x(), round(vec.y()) + location().y() };
+            auto newloc = kmint::point{ round(vec.x()) + loc.x(), round(vec.y()) + loc.y() };
 
+            // No matter what, they can't get out of view
             if (newloc.x() < 10) newloc.x(10); else if (newloc.x() > 1270) newloc.x(1270);
-            if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 710) newloc.y(710);
+            if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 690) newloc.y(690);
 
             set_point(newloc );
+
+            velocity = vec;
         }
 
     private:
+        Linal::G2D::Vector velocity { -10, 10 };
         double attractedToSheep;
         double attractedToWater;
         double cohesion;
@@ -122,41 +123,28 @@ namespace kmint {
             auto loc = location();
             auto vec = Linal::G2D::Vector(loc.x(), loc.y());
 
-            int lowestDist = 999999;
+            int sumCount = 0;
+            Linal::G2D::Vector vecSum;
             for (auto bp : _board_pieces)
             {
                 if (dynamic_cast<kmint::Bunny*>(bp))
                 {
                     auto targetLoc = bp->location();
-                    if (loc.x() == targetLoc.x() && loc.y() == targetLoc.y())
+                    if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
                         continue;
 
                     auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
 
-                    auto diffVec = targetVec - vec;
-
-                    if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < lowestDist && std::abs(diffVec.x()) + std::abs(diffVec.y()) > 44)
-                    {
-                        lowestDist = std::abs(diffVec.x()) + std::abs(diffVec.y());
-                    }
+                    vecSum = vecSum + targetVec;
+                    sumCount++;
                 }
             }
 
-            for (auto bp : _board_pieces)
-            {
-                if (dynamic_cast<kmint::Bunny*>(bp))
-                {
-                    auto targetLoc = bp->location();
-                    auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
-
-                    auto diffVec = targetVec - vec;
-                    auto diff = std::abs(diffVec.x()) + std::abs(diffVec.y());
-
-                    if (diff == lowestDist)
-                    {
-                        return (targetVec - vec);
-                    }
-                }
+            if (sumCount > 0) {
+                vecSum = vecSum / sumCount;
+                vecSum.x(vecSum.x() - loc.x());
+                vecSum.y(vecSum.y() - loc.y());
+                return vecSum;
             }
 
             return Linal::G2D::Vector(0, 0);
@@ -199,7 +187,37 @@ namespace kmint {
         }
 
         Linal::G2D::Vector GetAlignmentVec(std::vector< board_piece*> _board_pieces) {
-            auto vec = Linal::G2D::Vector(location().x(), location().y());
+            auto loc = location();
+            auto vec = Linal::G2D::Vector(loc.x(), loc.y());
+
+            int sumCount = 0;
+            Linal::G2D::Vector vecSum;
+            for (auto bp : _board_pieces)
+            {
+                if (dynamic_cast<kmint::Bunny*>(bp))
+                {
+                    auto bunny = dynamic_cast<kmint::Bunny*>(bp);
+                    bunny,GetVelocity();
+
+                    auto targetLoc = bunny->location();
+                    if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
+                        continue;
+
+                    //auto diff = (targetLoc - loc);
+                    //if (std::abs(diff.x()) + std::abs(diff.y()) > 350)
+                    //    continue;
+
+                    vecSum = vecSum + bunny->GetVelocity();
+                    sumCount++;
+                }
+            }
+
+            if (sumCount > 0) {
+                vecSum = (vecSum / sumCount).GetUnitVector();
+                vecSum = vecSum + vec;
+
+                return vecSum;
+            }
 
             return Linal::G2D::Vector(0, 0);
         }
