@@ -43,10 +43,10 @@ namespace kmint {
 
             auto sheep = GetAttractionToSheepVec(_board_pieces).GetUnitVector() * attractedToSheep;
             auto cohes = GetCohesionVec(_board_pieces).GetUnitVector() * cohesion;
-            auto separ = GetSeparationVec(_board_pieces).GetUnitVector() * separation * 3;
+            auto separ = GetSeparationVec(_board_pieces) * separation * 3;
             auto align = GetAlignmentVec(_board_pieces).GetUnitVector() * alignment;
 
-            auto vec = (sheep + cohes + separ + align).GetUnitVector();
+            auto vec = (velocity + sheep + cohes + separ + align).GetUnitVector();
 
             auto newloc = kmint::point{ round(vec.x()) + loc.x(), round(vec.y()) + loc.y() };
 
@@ -135,6 +135,10 @@ namespace kmint {
 
                     auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
 
+                    auto diff = (targetLoc - loc);
+                    if (std::abs(diff.x()) + std::abs(diff.y()) > 400)
+                        continue;
+
                     vecSum = vecSum + targetVec;
                     sumCount++;
                 }
@@ -168,7 +172,7 @@ namespace kmint {
 
                     auto diffVec = targetVec - vec;
 
-                    if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < 45)
+                    if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < 65)
                     {
                         targetVecSum = targetVecSum + targetVec;
                         count++;
@@ -179,7 +183,7 @@ namespace kmint {
 
             if (count > 0)
             {
-                return (vec - (targetVecSum / count));
+                return (vec - (targetVecSum / count)).GetUnitVector() * count;
             }
 
 
@@ -203,9 +207,9 @@ namespace kmint {
                     if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
                         continue;
 
-                    //auto diff = (targetLoc - loc);
-                    //if (std::abs(diff.x()) + std::abs(diff.y()) > 350)
-                    //    continue;
+                    auto diff = (targetLoc - loc);
+                    if (std::abs(diff.x()) + std::abs(diff.y()) > 150)
+                        continue;
 
                     vecSum = vecSum + bunny->GetVelocity();
                     sumCount++;
