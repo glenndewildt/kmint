@@ -12,6 +12,7 @@ namespace kmint {
 
     void board::play() {
         bool playing = true;
+
         while(playing) {
             _renderer.clear();
             for(auto a : _board_pieces) {

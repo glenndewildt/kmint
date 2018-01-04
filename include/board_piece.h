@@ -7,6 +7,7 @@
 
 namespace kmint {
     class drawable;
+
     class board_piece {
     public:
         board_piece() {}

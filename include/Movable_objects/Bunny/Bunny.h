@@ -27,25 +27,30 @@ namespace kmint {
             std::uniform_int_distribution<int> separ(0, 1000);
             std::uniform_int_distribution<int> align(0, 1000);
 
-            attractedToSheep = (double) sheep(gen) / 500;
-            attractedToWater = (double) water(gen) / 500;
-            cohesion         = (double) cohes(gen) / 500;
-            separation       = (double) separ(gen) / 500;
-            alignment        = (double)  align(gen) / 500;
+            attractedToSheep = (double) sheep(gen) / 1000;
+            attractedToWater = (double) water(gen) / 1000;
+            cohesion         = (double) cohes(gen) / 1000;
+            separation       = 1; //(double) separ(gen) / 1000;
+            alignment        = (double)  align(gen) / 1000;
         };
         const drawable &get_drawable() const override { return _drawable; }
 
         void update(float dt, std::vector< board_piece*> _board_pieces)
         {
             auto attSheep = GetAttractionToSheepVec(_board_pieces);
+            auto attWater = GetAttractionToWater(_board_pieces);
+            auto separ = GetSeparationVec(_board_pieces);
 
-            attSheep = attSheep.GetUnitVector() * attractedToSheep;
+            //attSheep = attSheep.GetUnitVector() * attractedToSheep;
 
-            auto vec = attSheep;
+            auto vec = separ.GetUnitVector();
 
-            std::cout << "the attraction is " << attractedToSheep  << std::endl;
+            auto newloc = kmint::point{ vec.x() + location().x(), vec.y() + location().y() };
 
-            set_point(kmint::point { vec.x() + location().x(), vec.y() + location().y() });
+            if (newloc.x() < 10) newloc.x(10); else if (newloc.x() > 1270) newloc.x(1270);
+            if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 710) newloc.y(710);
+
+            set_point(newloc );
         }
 
     private:
@@ -76,6 +81,34 @@ namespace kmint {
         Linal::G2D::Vector GetAttractionToWater(std::vector< board_piece*> _board_pieces) {
             auto vec = Linal::G2D::Vector(location().x(), location().y());
 
+
+            int lowerX = vec.x() - 10;
+            int upperX = vec.y() - 10;
+            int lowerY = vec.x() + 10;
+            int upperY = vec.y() + 10;
+
+            for (auto bp : _board_pieces)
+            {
+                if (dynamic_cast<kmint::graph*>(bp))
+                {
+                    auto graph = dynamic_cast<kmint::graph*>(bp);
+                    for(auto node : *graph)
+                    {
+                        if (
+                                (unsigned int) (node.location().x() - lowerX) <= (upperX - lowerX)  &&
+                                (unsigned int) (node.location().y() - lowerY) <= (upperY - lowerY))
+                        {
+                            // It's a node
+                            return Linal::G2D::Vector(200, 200);
+                        }
+                        else
+                        {
+                        }
+                    }
+                }
+            }
+
+
             return Linal::G2D::Vector(0, 0);
         }
 
@@ -86,28 +119,37 @@ namespace kmint {
         }
 
         Linal::G2D::Vector GetSeparationVec(std::vector< board_piece*> _board_pieces) {
-            auto vec = Linal::G2D::Vector(location().x(), location().y());
+            auto loc = location();
+            auto vec = Linal::G2D::Vector(loc.x(), loc.y());
 
+            auto targetVecSum = Linal::G2D::Vector(0, 0);
+            int count = 0;
             for (auto bp : _board_pieces)
             {
                 if (dynamic_cast<kmint::Bunny*>(bp))
                 {
                     auto targetLoc = bp->location();
-                    auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y());
+                    if (loc.x() == targetLoc.x() && loc.y() == targetLoc.y())
+                        continue;
+
+                    auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
 
                     auto diffVec = targetVec - vec;
 
-                    if (diffVec.x() < 15)
-
-                    if (attractedToSheep > 0) {
-                        return (targetVec - vec).GetUnitVector();
-                    }
-                    else if (attractedToSheep < 0)
+                    if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < 45)
                     {
-                        return (vec - targetVec).GetUnitVector();
+                        targetVecSum = targetVecSum + targetVec;
+                        count++;
                     }
+
                 }
             }
+
+            if (count > 0)
+            {
+                return (vec - (targetVecSum / count));
+            }
+
 
             return Linal::G2D::Vector(0, 0);
         }

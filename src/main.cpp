@@ -26,6 +26,9 @@ int main() {
         kmint::Bunny rabbit1 { kmint::point { 380, 360}, kmint::image { "resources/bunnelby.png", 0.33f } };
         kmint::Bunny rabbit2 { kmint::point { 120, 100}, kmint::image { "resources/bunnelby.png", 0.33f } };
         kmint::Bunny rabbit3 { kmint::point { 850, 120}, kmint::image { "resources/bunnelby.png", 0.33f } };
+        kmint::Bunny rabbit4 { kmint::point { 855, 122}, kmint::image { "resources/bunnelby.png", 0.33f } };
+
+        kmint::Bunny rabbit5 { kmint::point { 845, 118}, kmint::image { "resources/bunnelby.png", 0.33f } };
 
         kmint::graph_bound_board_piece meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
         kmint::graph_bound_board_piece mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
@@ -47,6 +50,8 @@ int main() {
         s.add_board_piece(rabbit1);
         s.add_board_piece(rabbit2);
         s.add_board_piece(rabbit3);
+        s.add_board_piece(rabbit4);
+        s.add_board_piece(rabbit5);
 
         s.play();
     }

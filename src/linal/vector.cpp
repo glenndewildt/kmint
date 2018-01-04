@@ -55,10 +55,15 @@ Vector Vector::operator/(const Vector& rhs)
 }
 
 Vector Vector::GetUnitVector() {
-    return Vector(
+    auto vec = Vector(
         xAxis / sqrt(pow(xAxis, 2) + pow(yAxis, 2)),
         yAxis / sqrt(pow(xAxis, 2) + pow(yAxis, 2))
     );
+
+    if (std::isnan(vec.x())) vec.x(0);
+    if (std::isnan(vec.y())) vec.y(0);
+
+    return vec;
 }
 
 double Vector::x() {
