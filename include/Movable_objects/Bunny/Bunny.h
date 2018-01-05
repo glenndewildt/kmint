@@ -20,7 +20,7 @@ namespace kmint {
 
     public:
         Bunny(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i } {
-            std::default_random_engine gen(rand());
+            std::default_random_engine gen(rand() % 10000);
             std::uniform_int_distribution<int> sheep(-1000, 1000);
             std::uniform_int_distribution<int> water(-1000, 1000);
             std::uniform_int_distribution<int> cohes(0, 1000);
@@ -42,11 +42,12 @@ namespace kmint {
             auto loc = location();
 
             auto sheep = GetAttractionToSheepVec(_board_pieces).GetUnitVector() * attractedToSheep;
+            auto water = GetAttractionToWater(_board_pieces).GetUnitVector() * attractedToWater;
             auto cohes = GetCohesionVec(_board_pieces).GetUnitVector() * cohesion;
-            auto separ = GetSeparationVec(_board_pieces) * separation * 3;
+            auto separ = GetSeparationVec(_board_pieces) * separation;
             auto align = GetAlignmentVec(_board_pieces).GetUnitVector() * alignment;
 
-            auto vec = (velocity + sheep + cohes + separ + align).GetUnitVector();
+            auto vec = (velocity + sheep + water + align + separ + cohes).GetUnitVector();
 
             auto newloc = kmint::point{ round(vec.x()) + loc.x(), round(vec.y()) + loc.y() };
 
@@ -86,35 +87,51 @@ namespace kmint {
         }
 
         Linal::G2D::Vector GetAttractionToWater(std::vector< board_piece*> _board_pieces) {
-            auto vec = Linal::G2D::Vector(location().x(), location().y());
+            auto loc = location();
+            auto vec = Linal::G2D::Vector(loc.x(), loc.y());
 
-
-            int lowerX = vec.x() - 10;
-            int upperX = vec.y() - 10;
-            int lowerY = vec.x() + 10;
-            int upperY = vec.y() + 10;
+            int lowestDist = -1; // nan
+            int lowestRow = 0;
+            int lowestCol = 0;
 
             for (auto bp : _board_pieces)
             {
                 if (dynamic_cast<kmint::graph*>(bp))
                 {
                     auto graph = dynamic_cast<kmint::graph*>(bp);
-                    for(auto node : *graph)
+
+                    unsigned int rowCount = 0;
+                    unsigned int colCount = 0;
+
+                    auto analyzes = graph->GetMapAnalysis();
+                    for (auto row : analyzes)
                     {
-                        if (
-                                (unsigned int) (node.location().x() - lowerX) <= (upperX - lowerX)  &&
-                                (unsigned int) (node.location().y() - lowerY) <= (upperY - lowerY))
+                        colCount = 0;
+                        for (bool isNode : row)
                         {
-                            // It's a node
-                            return Linal::G2D::Vector(200, 200);
+                            if (!isNode) { // then it's water
+                                auto tarVec = Linal::G2D::Vector((colCount * 20) + 10, (rowCount * 20) + 10);
+                                auto diffvec = tarVec - vec;
+                                if (lowestDist < 0 || (std::abs(diffvec.x()) + std::abs(diffvec.y())) < lowestDist)
+                                {
+                                    lowestDist = std::abs(diffvec.x()) + std::abs(diffvec.y());
+                                    lowestRow = rowCount;
+                                    lowestCol = colCount;
+                                }
+                            }
+                            colCount++;
                         }
-                        else
-                        {
-                        }
+                        rowCount++;
                     }
+                    break;
                 }
             }
 
+            auto targetVec = Linal::G2D::Vector((lowestCol * 20) + 10, (lowestRow * 20) + 10);
+            auto diffVec = targetVec - vec;
+            if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < 45) {
+                return vec - targetVec;
+            }
 
             return Linal::G2D::Vector(0, 0);
         }

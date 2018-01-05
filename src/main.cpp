@@ -56,7 +56,7 @@ int main() {
         std::uniform_int_distribution<int> xCord(10, 1270);
         std::uniform_int_distribution<int> yCord(10, 690);
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 20; i++)
         {
             kmint::Bunny *bunny = new kmint::Bunny { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/bunnelby.png", 0.33f } };
             s.add_board_piece(*bunny);
