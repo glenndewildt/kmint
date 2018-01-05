@@ -14,25 +14,21 @@
 
 namespace kmint {
 
-    class Sheep : public graph_bound_board_piece{
+    class state_object : public graph_bound_board_piece{
     protected:
         base_state *current_state;
         std::map<std::string, base_state *> states;
     public:
-        Sheep(const graph &graph, node_id nid, const image &i):graph_bound_board_piece(graph, nid, i){
+        state_object(const graph &graph, node_id nid, const image &i):graph_bound_board_piece(graph, nid, i){
 
         };
 
         void update(float dt, std::vector< board_piece*> _board_pieces)
         {
-            std::cout << "update sheep" <<std::endl;
-            if(get_node_id() < 1000){
-                set_node_id({get_node_id()+1});
-            }
-            update();
+            update( _board_pieces);
         }
-         void update() {
-            current_state->check_state();
+         void update(std::vector< board_piece*> _board_pieces) {
+            current_state->check_state(_board_pieces, this->location());
             current_state->update();
         };
 

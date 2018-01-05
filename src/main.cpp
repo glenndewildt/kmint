@@ -12,8 +12,9 @@
 #include <Movable_objects/Cow/Cow.h>
 #include <Movable_objects/Bunny/Bunny.h>
 #include <circle.h>
-#include <Movable_objects/Sheep/Sheep.h>
+#include <Movable_objects/Sheep/state_object.h>
 #include <Movable_objects/Sheep/wandering_state.h>
+#include <Movable_objects/Sheep/sleep_state.h>
 #include "board_drawable.h"
 #include "../a_star/a_star.h"
 
@@ -30,14 +31,16 @@ int main() {
         kmint::graph_bound_board_piece meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
         kmint::graph_bound_board_piece mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
         kmint::Cow sheep{ g, 0, kmint::image { "resources/poochyena.png", 0.25f }};
-        kmint::Sheep t{ g,1,kmint::image { "resources/cow.png", 0.25f }};
+        kmint::state_object t{ g,447,kmint::image { "resources/cow.png", 0.25f }};
         kmint::a_star search;
         kmint::node start = g[445];
         kmint::node end = g[460];
         //t.set_point(kmint::point{1000,100});
 
         //add states
-        t.add_state(new wandering_state(),"wandering");
+        t.add_state(new kmint::wandering_state(&t),"wandering");
+        t.add_state(new kmint::sleep_state(&t),"sleep");
+
         t.set_state("wandering");
 
         search.search(&g,start, end);
