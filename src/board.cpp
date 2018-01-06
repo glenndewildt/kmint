@@ -30,15 +30,14 @@ namespace kmint {
 
         /* Your algorithm here */
 
-
-
         while(playing) {
             duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
             _renderer.clear();
 
-            auto q = std::remove_if(_board_pieces.begin(), _board_pieces.end(), hasDied);
-            _board_pieces.erase(q, _board_pieces.end());
+            // Only remove on new poolCycle
+            //auto q = std::remove_if(_board_pieces.begin(), _board_pieces.end(), hasDied);
+            //_board_pieces.erase(q, _board_pieces.end());
 
             for(auto a : _board_pieces) {
                 a->update(duration, _board_pieces);
@@ -52,15 +51,6 @@ namespace kmint {
                 {
                     a->get_drawable().draw(_renderer);
                 }
-
-
-                /*if (dynamic_cast<kmint::graph_bound_board_piece*>(a))
-                {
-                    kmint::circle radius { *a, 500 };
-                    _renderer.set_color(color(255, 0, 0, 255));
-                    std::cout << "rendered cirlce";
-                    radius.draw(_renderer);
-                }*/
             }
             _renderer.render();
 

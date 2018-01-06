@@ -12,6 +12,7 @@
 #include <linal/vector.h>
 #include <Movable_objects/Cow/Cow.h>
 #include <random>
+#include <Movable_objects/Sheep/Sheep.h>
 
 namespace kmint {
 
@@ -62,7 +63,7 @@ namespace kmint {
 
             // No matter what, they can't get out of view
             if (newloc.x() < 10) newloc.x(10); else if (newloc.x() > 1270) newloc.x(1270);
-            if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 690) newloc.y(690);
+            if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 710) newloc.y(710);
 
             set_point(newloc );
 
@@ -86,7 +87,7 @@ namespace kmint {
 
             for (auto bp : _board_pieces)
             {
-                if (dynamic_cast<kmint::Cow*>(bp))
+                if (dynamic_cast<kmint::Sheep*>(bp))
                 {
                     auto targetLoc = bp->location();
                     auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y());
@@ -167,7 +168,7 @@ namespace kmint {
                     auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
 
                     auto diff = (targetLoc - loc);
-                    if (std::abs(diff.x()) + std::abs(diff.y()) > 4000)
+                    if (std::abs(diff.x()) + std::abs(diff.y()) > 400)
                         continue;
 
                     vecSum = vecSum + targetVec;
