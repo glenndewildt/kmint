@@ -34,6 +34,9 @@ namespace kmint {
             separation       = ((double) separ(gen) / 1000) +1;
             alignment        = ((double) align(gen) / 1000) +1;
         };
+        Bunny(point location, const image &i, double ats, double atw, double coh, double sep, double ali)
+            : free_roaming_board_piece { location }, _drawable { *this,i }, attractedToSheep(ats), attractedToWater(atw), cohesion(coh), separation(sep), alignment(ali)
+        { }
         const drawable &get_drawable() const override { return _drawable; }
 
         const Linal::G2D::Vector& GetVelocity() { return velocity; }
@@ -70,6 +73,12 @@ namespace kmint {
             velocity = vec;
         }
 
+        double GetAttractionToSheep(){ return attractedToSheep; }
+        double GetAttractionToWater(){ return attractedToWater; }
+        double GetCohesion() { return cohesion; }
+        double GetSeparation() { return separation; }
+        double GetAlignment() { return alignment; }
+
     private:
         Linal::G2D::Vector velocity { -10, 10 };
         double attractedToSheep;
@@ -81,7 +90,7 @@ namespace kmint {
         int fitness = 0;
         bool isDead = false;
 
-    public:
+    //public:
         Linal::G2D::Vector GetAttractionToSheepVec(std::vector< board_piece*> _board_pieces) {
             auto vec = Linal::G2D::Vector(location().x(), location().y());
 
@@ -260,6 +269,7 @@ namespace kmint {
             return Linal::G2D::Vector(0, 0);
         }
 
+    public:
         bool isOnWater(std::vector< board_piece*> _board_pieces)
         {
             auto loc = location();
