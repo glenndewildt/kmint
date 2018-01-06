@@ -26,8 +26,10 @@ namespace kmint {
             if(randNum > sheep->miss  ){
                 std::cout <<  sheep->miss<< std::endl;
 
-                int add = rand()%(100-0 + 1) + 0;
-                if(add > 50){
+                int add = rand()%(10-80 + 1) + 80;
+                sheep->thurst -= add;
+
+                if(add > 40){
                     if(sheep->miss <=95){
                         sheep->miss += 5;
                         sheep->mrs -=5;
@@ -36,13 +38,17 @@ namespace kmint {
 
 
             }else{
-                int add = rand()%(100-0 + 1) + 0;
+                int add = rand()%(30-50 + 1) + 30;
+                sheep->thurst -= add;
 
-                if(add > 50){
+                if(add > 40){
                     if(sheep->mrs <=95){
                         sheep->mrs += 5;
                         sheep->miss -=5;
                     }
+                }
+                if(sheep->thurst < 0){
+                    sheep->thurst = 0;
                 }
 
             }
@@ -55,9 +61,11 @@ namespace kmint {
 
             if (dynamic_cast<Sheep*>(object)) {
                 Sheep* dog = dynamic_cast<Sheep*>(object);
-                if(dog->thurst > 0 ){
+                if(dog->thurst == 0 ){
                     chose_person(dog);
-                    //object->set_state("wandering");
+                }else{
+                    object->set_state("wandering");
+
                 }
 
             }
