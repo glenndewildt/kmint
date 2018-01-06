@@ -12,6 +12,7 @@
 #include <linal/vector.h>
 #include <Movable_objects/Cow/Cow.h>
 #include <random>
+#include <Movable_objects/Sheep/Sheep.h>
 
 namespace kmint {
 
@@ -33,12 +34,24 @@ namespace kmint {
             separation       = ((double) separ(gen) / 1000) +1;
             alignment        = ((double) align(gen) / 1000) +1;
         };
+        Bunny(point location, const image &i, double ats, double atw, double coh, double sep, double ali)
+            : free_roaming_board_piece { location }, _drawable { *this,i }, attractedToSheep(ats), attractedToWater(atw), cohesion(coh), separation(sep), alignment(ali)
+        { }
         const drawable &get_drawable() const override { return _drawable; }
 
         const Linal::G2D::Vector& GetVelocity() { return velocity; }
+        const int GetFitness() const { return fitness; }
+
+        bool hasDied() { return isDead; }
 
         void update(float dt, std::vector< board_piece*> &_board_pieces)
         {
+            if (isOnWater(_board_pieces)) {
+                isDead = true;
+                return;
+            }
+
+            fitness++;
             auto loc = location();
 
             auto sheep = GetAttractionToSheepVec(_board_pieces).GetUnitVector() * attractedToSheep;
@@ -53,12 +66,18 @@ namespace kmint {
 
             // No matter what, they can't get out of view
             if (newloc.x() < 10) newloc.x(10); else if (newloc.x() > 1270) newloc.x(1270);
-            if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 690) newloc.y(690);
+            if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 710) newloc.y(710);
 
             set_point(newloc );
 
             velocity = vec;
         }
+
+        double GetAttractionToSheep(){ return attractedToSheep; }
+        double GetAttractionToWater(){ return attractedToWater; }
+        double GetCohesion() { return cohesion; }
+        double GetSeparation() { return separation; }
+        double GetAlignment() { return alignment; }
 
     private:
         Linal::G2D::Vector velocity { -10, 10 };
@@ -68,13 +87,16 @@ namespace kmint {
         double separation;
         double alignment;
 
-    public:
+        int fitness = 0;
+        bool isDead = false;
+
+    //public:
         Linal::G2D::Vector GetAttractionToSheepVec(std::vector< board_piece*> _board_pieces) {
             auto vec = Linal::G2D::Vector(location().x(), location().y());
 
             for (auto bp : _board_pieces)
             {
-                if (dynamic_cast<kmint::Cow*>(bp))
+                if (dynamic_cast<kmint::Sheep*>(bp))
                 {
                     auto targetLoc = bp->location();
                     auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y());
@@ -129,8 +151,8 @@ namespace kmint {
 
             auto targetVec = Linal::G2D::Vector((lowestCol * 20) + 10, (lowestRow * 20) + 10);
             auto diffVec = targetVec - vec;
-            if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < 45) {
-                return (vec - targetVec).GetUnitVector() * (45 - std::abs(diffVec.x() + std::abs(diffVec.y())));
+            if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < 35) {
+                return (vec - targetVec).GetUnitVector() * (35 - std::abs(diffVec.x() + std::abs(diffVec.y())));
             }
 
             return Linal::G2D::Vector(0, 0);
@@ -144,8 +166,10 @@ namespace kmint {
             Linal::G2D::Vector vecSum;
             for (auto bp : _board_pieces)
             {
-                if (dynamic_cast<kmint::Bunny*>(bp))
+                if (auto bunny = dynamic_cast<kmint::Bunny*>(bp))
                 {
+                    if (bunny->hasDied()) continue;
+
                     auto targetLoc = bp->location();
                     if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
                         continue;
@@ -179,8 +203,10 @@ namespace kmint {
             int count = 0;
             for (auto bp : _board_pieces)
             {
-                if (dynamic_cast<kmint::Bunny*>(bp))
+                if (auto bunny = dynamic_cast<kmint::Bunny*>(bp))
                 {
+                    if (bunny->hasDied()) continue;
+
                     auto targetLoc = bp->location();
                     if (loc.x() == targetLoc.x() && loc.y() == targetLoc.y())
                         continue;
@@ -216,10 +242,9 @@ namespace kmint {
             Linal::G2D::Vector vecSum;
             for (auto bp : _board_pieces)
             {
-                if (dynamic_cast<kmint::Bunny*>(bp))
+                if (auto bunny = dynamic_cast<kmint::Bunny*>(bp))
                 {
-                    auto bunny = dynamic_cast<kmint::Bunny*>(bp);
-                    bunny,GetVelocity();
+                    if (bunny->hasDied()) continue;
 
                     auto targetLoc = bunny->location();
                     if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
@@ -244,6 +269,7 @@ namespace kmint {
             return Linal::G2D::Vector(0, 0);
         }
 
+    public:
         bool isOnWater(std::vector< board_piece*> _board_pieces)
         {
             auto loc = location();
@@ -288,7 +314,7 @@ namespace kmint {
 
             auto targetVec = Linal::G2D::Vector((lowestCol * 20) + 10, (lowestRow * 20) + 10);
             auto diffVec = targetVec - vec;
-            if (std::abs(diffVec.x()) + std::abs(diffVec.y()) <= 25) {
+            if (std::abs(diffVec.x()) + std::abs(diffVec.y()) <= 21) {
                 return true;
             }
 
