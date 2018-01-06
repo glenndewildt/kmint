@@ -2,8 +2,8 @@
 // Created by administrator on 4-1-18.
 //
 
-#ifndef KMINTFRAMEWORK_SHEEP_H
-#define KMINTFRAMEWORK_SHEEP_H
+#ifndef KMINTFRAMEWORK_STATE_OBJECT_H
+#define KMINTFRAMEWORK_STATE_OBJECT_H
 
 
 #include <array>
@@ -23,11 +23,11 @@ namespace kmint {
 
         };
 
-        void update(float dt, std::vector< board_piece*> _board_pieces)
+        virtual void update(float dt, std::vector< board_piece*> &_board_pieces)
         {
             update( _board_pieces);
         }
-         void update(std::vector< board_piece*> _board_pieces) {
+        virtual void update(std::vector< board_piece*> &_board_pieces) {
             current_state->check_state(_board_pieces, this->location());
             current_state->update();
         };
@@ -45,4 +45,4 @@ namespace kmint {
 }
 
 
-#endif //KMINTFRAMEWORK_SHEEP_H
+#endif //KMINTFRAMEWORK_STATE_OBJECT_H

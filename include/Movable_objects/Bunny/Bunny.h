@@ -40,7 +40,7 @@ namespace kmint {
 
         bool hasDied() { return isDead; }
 
-        void update(float dt, std::vector< board_piece*> _board_pieces)
+        void update(float dt, std::vector< board_piece*> &_board_pieces)
         {
             if (isOnWater(_board_pieces)) {
                 isDead = true;

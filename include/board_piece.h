@@ -19,7 +19,7 @@ namespace kmint {
         board_piece& operator=(const board_piece&) = delete;
         board_piece& operator=(board_piece&&) = delete;
         
-        virtual void update(float dt, std::vector< board_piece*> _board_pieces) {}
+        virtual void update(float dt, std::vector< board_piece*> &_board_pieces) {};
         virtual const drawable& get_drawable() const = 0;
         virtual point location() const = 0;
     };
