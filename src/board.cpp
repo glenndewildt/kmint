@@ -5,10 +5,13 @@
 #include <SDL2/SDL.h>
 #include <graph_bound_board_piece.h>
 #include <circle.h>
+#include "isOnWater.h"
+#include <Movable_objects/Bunny/Bunny.h>
+#include <algorithm>
 #include <ctime>
 
 namespace kmint {
-    board::board() : _window { "Hello World!", 10, 10 },
+    board::board() : _window { "Hello World!", 1280, 720 },
                      _renderer { _window } {}
 
     void board::play() {
@@ -28,6 +31,10 @@ namespace kmint {
             duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
             _renderer.clear();
+
+            auto q = std::remove_if(_board_pieces.begin(), _board_pieces.end(), IsOnWater(_board_pieces));
+            _board_pieces.erase(q, _board_pieces.end());
+
             for(auto a : _board_pieces) {
                 a->update(duration, _board_pieces);
                 a->get_drawable().draw(_renderer);

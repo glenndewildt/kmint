@@ -42,7 +42,7 @@ namespace kmint {
             auto loc = location();
 
             auto sheep = GetAttractionToSheepVec(_board_pieces).GetUnitVector() * attractedToSheep;
-            auto water = GetAttractionToWater(_board_pieces).GetUnitVector() * attractedToWater;
+            auto water = GetAttractionToWater(_board_pieces) * attractedToWater;
             auto cohes = GetCohesionVec(_board_pieces).GetUnitVector() * cohesion;
             auto separ = GetSeparationVec(_board_pieces) * separation;
             auto align = GetAlignmentVec(_board_pieces).GetUnitVector() * alignment;
@@ -130,7 +130,7 @@ namespace kmint {
             auto targetVec = Linal::G2D::Vector((lowestCol * 20) + 10, (lowestRow * 20) + 10);
             auto diffVec = targetVec - vec;
             if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < 45) {
-                return vec - targetVec;
+                return (vec - targetVec).GetUnitVector() * (45 - std::abs(diffVec.x() + std::abs(diffVec.y())));
             }
 
             return Linal::G2D::Vector(0, 0);
@@ -200,7 +200,8 @@ namespace kmint {
 
             if (count > 0)
             {
-                return (vec - (targetVecSum / count)).GetUnitVector() * count;
+                auto diffVec = (targetVecSum / count) - vec;
+                return (vec - (targetVecSum / count)).GetUnitVector() * (65 - (std::abs(diffVec.x() + std::abs(diffVec.y()))));
             }
 
 
@@ -241,6 +242,57 @@ namespace kmint {
             }
 
             return Linal::G2D::Vector(0, 0);
+        }
+
+        bool isOnWater(std::vector< board_piece*> _board_pieces)
+        {
+            auto loc = location();
+            auto vec = Linal::G2D::Vector(loc.x(), loc.y());
+
+            int lowestDist = -1; // nan
+            int lowestRow = 0;
+            int lowestCol = 0;
+
+            for (auto bp : _board_pieces)
+            {
+                if (dynamic_cast<kmint::graph*>(bp))
+                {
+                    auto graph = dynamic_cast<kmint::graph*>(bp);
+
+                    unsigned int rowCount = 0;
+                    unsigned int colCount = 0;
+
+                    auto analyzes = graph->GetMapAnalysis();
+                    for (auto row : analyzes)
+                    {
+                        colCount = 0;
+                        for (bool isNode : row)
+                        {
+                            if (!isNode) { // then it's water
+                                auto tarVec = Linal::G2D::Vector((colCount * 20) + 10, (rowCount * 20) + 10);
+                                auto diffvec = tarVec - vec;
+                                if (lowestDist < 0 || (std::abs(diffvec.x()) + std::abs(diffvec.y())) < lowestDist)
+                                {
+                                    lowestDist = std::abs(diffvec.x()) + std::abs(diffvec.y());
+                                    lowestRow = rowCount;
+                                    lowestCol = colCount;
+                                }
+                            }
+                            colCount++;
+                        }
+                        rowCount++;
+                    }
+                    break;
+                }
+            }
+
+            auto targetVec = Linal::G2D::Vector((lowestCol * 20) + 10, (lowestRow * 20) + 10);
+            auto diffVec = targetVec - vec;
+            if (std::abs(diffVec.x()) + std::abs(diffVec.y()) <= 25) {
+                return true;
+            }
+
+            return false;
         }
     };
 

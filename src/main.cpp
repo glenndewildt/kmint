@@ -57,7 +57,7 @@ int main() {
         kmint::Bunny bunny { kmint::point { 10, 20 }, kmint::image { "resources/bunnelby.png", 0.33f } };
         //s.add_board_piece(bunny);
 
-        std::default_random_engine gen(rand());
+        std::default_random_engine gen(rand() % 1000);
         std::uniform_int_distribution<int> xCord(10, 1270);
         std::uniform_int_distribution<int> yCord(10, 690);
 
