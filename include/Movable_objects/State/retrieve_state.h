@@ -24,13 +24,12 @@ namespace kmint {
         void chose_person(Sheep* sheep){
             int randNum = rand()%(100-0 + 1) + 0;
             if(randNum > sheep->miss  ){
-                std::cout <<  sheep->miss<< std::endl;
 
                 int add = rand()%(10-80 + 1) + 80;
                 sheep->thurst -= add;
 
                 if(add > 40){
-                    if(sheep->miss <=95){
+                    if(sheep->miss <=90){
                         sheep->miss += 5;
                         sheep->mrs -=5;
                     }
@@ -42,7 +41,7 @@ namespace kmint {
                 sheep->thurst -= add;
 
                 if(add > 40){
-                    if(sheep->mrs <=95){
+                    if(sheep->mrs <=90){
                         sheep->mrs += 5;
                         sheep->miss -=5;
                     }
@@ -61,7 +60,7 @@ namespace kmint {
 
             if (dynamic_cast<Sheep*>(object)) {
                 Sheep* dog = dynamic_cast<Sheep*>(object);
-                if(dog->thurst == 0 ){
+                if(dog->thurst >0 ){
                     chose_person(dog);
                 }else{
                     object->set_state("wandering");

@@ -17,6 +17,8 @@
 #include <Movable_objects/State/sleep_state.h>
 #include <Movable_objects/Sheep/Sheep.h>
 #include <Movable_objects/State/retrieve_state.h>
+#include <Movable_objects/Jansen/Mrs_Jansen.h>
+#include <Movable_objects/Jansen/Miss_Jansen.h>
 
 #include "board_drawable.h"
 #include "../a_star/a_star.h"
@@ -31,8 +33,8 @@ int main() {
         kmint::board s {};
         kmint::background b { kmint::image { "resources/Graph.png" } };
 
-        kmint::graph_bound_board_piece meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
-        kmint::graph_bound_board_piece mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
+        kmint::Mrs_Jansen meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
+        kmint::Miss_Jansen mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
         kmint::Sheep t{ g,0,kmint::image { "resources/poochyena.png", 0.25f }};
         kmint::a_star search;
         kmint::node start = g[445];
