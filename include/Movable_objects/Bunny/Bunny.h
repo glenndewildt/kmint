@@ -37,7 +37,7 @@ namespace kmint {
 
         const Linal::G2D::Vector& GetVelocity() { return velocity; }
 
-        void update(float dt, std::vector< board_piece*> _board_pieces)
+        void update(float dt, std::vector< board_piece*> &_board_pieces)
         {
             auto loc = location();
 

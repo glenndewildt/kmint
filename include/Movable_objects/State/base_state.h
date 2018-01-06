@@ -16,7 +16,7 @@ namespace kmint {
     public:
         virtual ~base_state() {};
 
-        virtual void check_state(std::vector< board_piece*> _board_pieces, point my_location) {};
+        virtual void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {};
 
         virtual void update() {};
 

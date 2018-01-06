@@ -19,7 +19,7 @@ namespace kmint {
         state_object* object;
     public:
         wandering_state(state_object* object): object{object}{};
-        void check_state(std::vector< board_piece*> _board_pieces, point my_location) {
+        void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
             //check condition if near by bunny
             for (auto bp : _board_pieces) {
                 if (dynamic_cast<kmint::Bunny *>(bp)) {

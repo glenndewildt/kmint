@@ -20,7 +20,7 @@ namespace kmint {
         state_object* object;
     public:
         sleep_state(state_object* object): object{object}{};
-        void check_state(std::vector< board_piece*> _board_pieces, point my_location) {
+        void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
             int count = 0;
             int counter = 0 ;
 
