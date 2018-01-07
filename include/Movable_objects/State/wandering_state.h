@@ -18,6 +18,8 @@ namespace kmint {
 
         state_object* object;
     public:
+        void OnExit(){};
+        void OnEnter(){};
         wandering_state(state_object* object): object{object}{};
         void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
             //check condition if near by bunny

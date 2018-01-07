@@ -20,6 +20,8 @@ namespace kmint {
 
         state_object* object;
     public:
+         void OnExit(){};
+         void OnEnter(){};
         retrieve_state(state_object* object): object{object}{};
         void chose_person(Sheep* sheep){
             int randNum = rand()%(100-0 + 1) + 0;

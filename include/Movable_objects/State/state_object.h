@@ -19,6 +19,8 @@ namespace kmint {
         base_state *current_state;
         std::map<std::string, base_state *> states;
     public:
+        void OnExit(){};
+        void OnEnter(){};
         state_object(const graph &graph, node_id nid, const image &i):graph_bound_board_piece(graph, nid, i){
 
         };

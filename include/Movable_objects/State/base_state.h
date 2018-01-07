@@ -15,6 +15,8 @@ namespace kmint {
     private:
     public:
         virtual ~base_state() {};
+        virtual void OnExit(){};
+        virtual void OnEnter(){};
 
         virtual void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {};
 
