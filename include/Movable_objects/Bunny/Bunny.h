@@ -34,9 +34,12 @@ namespace kmint {
             separation       = ((double) separ(gen) / 1000) +1;
             alignment        = ((double) align(gen) / 1000) +1;
         };
+
         Bunny(point location, const image &i, double ats, double atw, double coh, double sep, double ali)
-            : free_roaming_board_piece { location }, _drawable { *this,i }, attractedToSheep(ats), attractedToWater(atw), cohesion(coh), separation(sep), alignment(ali)
-        { }
+            : free_roaming_board_piece { location }, _drawable { *this,i }, attractedToSheep(ats + 1), attractedToWater(atw + 1), cohesion(coh + 1), separation(sep + 1), alignment(ali + 1)
+        {
+            auto debug = false;
+        }
         const drawable &get_drawable() const override { return _drawable; }
 
         const Linal::G2D::Vector& GetVelocity() { return velocity; }
