@@ -2,10 +2,10 @@
 #include "point.h"
 #include "board_piece.h"
 #include "drawable.h"
+#include "BunnySpawner.h"
 #include <SDL2/SDL.h>
 #include <graph_bound_board_piece.h>
 #include <circle.h>
-#include "isOnWater.h"
 #include <Movable_objects/Bunny/Bunny.h>
 #include <algorithm>
 #include <ctime>
@@ -14,9 +14,13 @@ namespace kmint {
     board::board() : _window { "Hello World!", 1280, 720 },
                      _renderer { _window } {}
 
-    bool hasDied(kmint::Bunny* bunny)
+    bool hasDied(kmint::board_piece* i)
     {
-        return bunny->hasDied();
+        if (auto bunny = dynamic_cast<kmint::Bunny*>(i)) {
+            return true; //return bunny->hasDied();
+        }
+
+        return false;
     }
 
     void board::play() {
@@ -36,8 +40,19 @@ namespace kmint {
             _renderer.clear();
 
             // Only remove on new poolCycle
-            //auto q = std::remove_if(_board_pieces.begin(), _board_pieces.end(), hasDied);
-            //_board_pieces.erase(q, _board_pieces.end());
+            // @TODO: move and split to a onEntry and onExit on the sleep state of the dog
+            if ((int) (duration + 0) % 30 == 0) {
+                BunnySpawner bs(_board_pieces);
+                auto newPool = bs.GetSpawnPool();
+
+                auto q = std::remove_if(_board_pieces.begin(), _board_pieces.end(), hasDied);
+                _board_pieces.erase(q, _board_pieces.end());
+
+                for (auto &nb : newPool)
+                {
+                    _board_pieces.push_back(&*nb);
+                }
+            }
 
             for(auto a : _board_pieces) {
                 a->update(duration, _board_pieces);
