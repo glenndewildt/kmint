@@ -21,7 +21,7 @@ namespace kmint {
     public:
         void OnExit(){};
         void OnEnter(){};
-        state_object(const graph &graph, node_id nid, const image &i):graph_bound_board_piece(graph, nid, i){
+        state_object(const graph &graph, node_id nid, const image &i):current_state{nullptr},graph_bound_board_piece(graph, nid, i){
 
         };
 
@@ -36,10 +36,15 @@ namespace kmint {
 
         virtual void add_state(base_state* enemy_state, const char* key) {
 
+
             states.insert(std::make_pair(std::string(key), enemy_state));
         };
         virtual void set_state(const char* key){
+            if(current_state != nullptr){
+                current_state->OnExit();
+            };
             current_state = states[std::string(key)];
+            current_state->OnEnter();
         };
 
 

@@ -16,7 +16,7 @@ namespace kmint {
     public:
         color _color;
 
-        node(point location, int id) : _location {location}, _id {id}, _edges {}, _color{ 0xff, 0x00, 0x00 }  {}
+        node(point location, int id) : _location {location}, _id {id}, _edges {}, _color{ 0xff, 0x00, 0x00 } {}
         int id() const noexcept { return _id; }
         point location() const noexcept { return _location; }
         void add_edge(edge e) { _edges.push_back(e); }

@@ -20,8 +20,14 @@ namespace kmint {
 
         state_object* object;
     public:
-         void OnExit(){};
-         void OnEnter(){};
+         void OnExit(){
+             std::cout<< "Exit  retieve state"<<std::endl;
+
+
+         };
+         void OnEnter(){
+             std::cout<< "Enter  retieve state"<<std::endl;
+         };
         retrieve_state(state_object* object): object{object}{};
         void chose_person(Sheep* sheep){
             int randNum = rand()%(100-0 + 1) + 0;

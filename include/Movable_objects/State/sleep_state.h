@@ -57,8 +57,17 @@ namespace kmint {
         };
 
         void draw() {};
+        void OnExit(){
+            std::cout<< "Exit  sleep state"<<std::endl;
+
+
+        };
+        void OnEnter(){
+            std::cout<< "Enter  sleep state"<<std::endl;
+        };
 
     };
+
 }
 
 
