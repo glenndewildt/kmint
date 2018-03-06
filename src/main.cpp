@@ -20,7 +20,6 @@
 #include <Movable_objects/Jansen/Mrs_Jansen.h>
 #include <Movable_objects/Jansen/Miss_Jansen.h>
 
-#include "board_drawable.h"
 #include "../a_star/a_star.h"
 
 int main() {
@@ -35,7 +34,7 @@ int main() {
 
         kmint::Mrs_Jansen meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
         kmint::Miss_Jansen mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
-        kmint::Sheep t{ g,0,kmint::image { "resources/poochyena.png", 0.25f }};
+        kmint::bandlit t{ g,0,kmint::image { "resources/poochyena.png", 0.25f }};
         kmint::a_star search;
         kmint::node start = g[445];
         kmint::node end = g[457];

@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <Movable_objects/Bunny/Bunny.h>
+#include <Movable_objects/Bandlit/bandlit.h>
 #include "base_state.h"
 #include "state_object.h"
 
@@ -22,18 +23,20 @@ namespace kmint {
         wandering_state(state_object* object): object{object}{};
         void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
             //check condition if near by bunny
-            for (auto bp : _board_pieces) {
-                if (dynamic_cast<kmint::Bunny *>(bp)) {
-                    auto loc = bp->location();
+            if (dynamic_cast<kmint::bandlit *>(object)) {
 
-                    auto diff = (my_location - loc);
-                    if( std::abs(diff.x()) + std::abs(diff.y()) < 50){
-                        std::cout<< "Near by bunny";
-                        object->set_state("sleep");
-                    }
+                kmint::bandlit* band =dynamic_cast<kmint::bandlit *>(object);
+                if( band->money <=100){
+                    std::cout<< "Geen money om te lopen";
+                    object->set_state("sleep");
+                }else{
+                    band->money = band->money - 20;
+                    std::cout<< "money - 20 G";
 
                 }
+
             }
+
 
         };
 

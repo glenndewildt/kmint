@@ -17,7 +17,7 @@ namespace kmint {
 
     class retrieve_state : public base_state {
     private:
-
+        int counter;
         state_object* object;
     public:
          void OnExit(){
@@ -28,7 +28,7 @@ namespace kmint {
          void OnEnter(){
              std::cout<< "Enter  retieve state"<<std::endl;
          };
-        retrieve_state(state_object* object): object{object}{};
+        retrieve_state(state_object* object):counter{0}, object{object}{};
         void chose_person(Sheep* sheep){
             int randNum = rand()%(100-0 + 1) + 0;
             if(randNum > sheep->miss  ){

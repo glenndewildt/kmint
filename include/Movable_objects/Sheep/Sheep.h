@@ -22,7 +22,7 @@ namespace kmint {
         {
             int difference = dt - thurst;
 
-            if(thurst > 0){
+            if(thurst = 100){
                 set_state("retieve");
 
             }else{

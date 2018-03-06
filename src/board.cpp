@@ -9,6 +9,7 @@
 #include <Movable_objects/Bunny/Bunny.h>
 #include <algorithm>
 #include <ctime>
+#include <fstream>
 
 namespace kmint {
     board::board() : _window { "Hello World!", 1280, 720 },
@@ -39,6 +40,7 @@ namespace kmint {
 
             _renderer.clear();
 
+
             // Only remove on new poolCycle
             // @TODO: move and split to a onEntry and onExit on the sleep state of the dog
             if ((int) (duration + 0) % 30 == 0) {
@@ -68,6 +70,9 @@ namespace kmint {
                 }
             }
             _renderer.render();
+
+
+
 
             SDL_Event e;
             while (SDL_PollEvent(&e)) {
