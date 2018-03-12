@@ -28,7 +28,7 @@ namespace kmint {
                 kmint::bandlit* band =dynamic_cast<kmint::bandlit *>(object);
                 if( band->money <=100){
                     std::cout<< "Geen money om te lopen";
-                    object->set_state("sleep");
+                  //  object->set_state("sleep");
                 }else{
                     band->money = band->money - 20;
                     std::cout<< "money - 20 G";
@@ -41,11 +41,40 @@ namespace kmint {
         };
 
         void update() {
-            std::cout << "wandering state" << std::endl;
+            std::cout << "wandering state id = "<< object->get_node_id() << std::endl;
+            std::vector<int> node_ids;
 
-            if(object->get_node_id() < 1000){
-                object->set_node_id({object->get_node_id()+1});
+            for(auto& node : object->get_graph()){
+                if(node.id() == object->get_node_id()){
+                    for(auto& edge : node){
+                        for(auto& edge_node :edge.to()){
+                            std::cout << "edge id = "<< edge_node.to().id()<< std::endl;
+
+                            if(edge_node.to().id() != object->get_node_id()){
+                                node_ids.push_back(edge_node.to().id());
+                            }
+
+                        }
+
+
+                    }
+                }
             }
+
+            std::mt19937 rng;
+            rng.seed(std::random_device()());
+            std::uniform_int_distribution<std::mt19937::result_type> dist6(0,node_ids.size());
+            int number = dist6(rng);
+            int number_index = 0;
+            for(int index : node_ids){
+                if(number_index == number){
+                     object->set_node_id(index);
+
+                }
+                number_index++;
+            }
+
+
         };
 
         void draw() {};
