@@ -40,18 +40,27 @@ int main() {
 
         kmint::Mrs_Jansen meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
         kmint::Miss_Jansen mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
-        kmint::bandlit t{ g,0,kmint::image { "resources/poochyena.png", 0.25f }};
+        kmint::bandlit t1{ g,66,kmint::image { "resources/poochyena.png", 0.25f }};
+        kmint::bandlit t2{ g,1180,kmint::image { "resources/poochyena.png", 0.25f }};
+        kmint::bandlit t3{ g,520,kmint::image { "resources/poochyena.png", 0.25f }};
+
         kmint::a_star search;
         kmint::node start = g[445];
         kmint::node end = g[457];
         //t.set_point(kmint::point{1000,100});
 
         //add states
-        t.add_state(new kmint::wandering_state(&t),"wandering");
-        t.add_state(new kmint::sleep_state(&t),"sleep");
-        t.add_state(new kmint::retrieve_state(&t),"retieve");
+        t1.add_state(new kmint::wandering_state(&t1),"wandering");
+        t2.add_state(new kmint::wandering_state(&t2),"wandering");
+        t3.add_state(new kmint::wandering_state(&t3),"wandering");
 
-        t.set_state("wandering");
+        t1.add_state(new kmint::sleep_state(&t1),"sleep");
+        t1.add_state(new kmint::retrieve_state(&t1),"retieve");
+
+        t1.set_state("wandering");
+        t2.set_state("wandering");
+        t3.set_state("wandering");
+
 
         search.search(&g,start, end);
         s.add_board_piece(b);
@@ -60,7 +69,10 @@ int main() {
         s.add_board_piece(meneer);
         s.add_board_piece(mevrouw);
 
-        s.add_board_piece(t);
+        s.add_board_piece(t1);
+        s.add_board_piece(t2);
+        s.add_board_piece(t3);
+
 
         std::default_random_engine gen(rand() % 1000);
         std::uniform_int_distribution<int> xCord(10, 1270);
