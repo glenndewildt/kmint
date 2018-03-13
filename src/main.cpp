@@ -19,6 +19,7 @@
 #include <Movable_objects/State/retrieve_state.h>
 #include <Movable_objects/Jansen/Mrs_Jansen.h>
 #include <Movable_objects/Jansen/Miss_Jansen.h>
+#include <city.h>
 
 #include "../a_star/a_star.h"
 
@@ -27,6 +28,11 @@ int main() {
         std::ifstream f { "/home/administrator/Desktop/KMINT/resources/graph.txt" };
         kmint::graph g { kmint::point{0.0f, 0.0f} };
         g.fill(f);
+
+        std::ifstream st { "/home/administrator/Desktop/KMINT/resources/stad.txt" };
+        kmint::city c { kmint::point{0.0f, 0.0f} };
+        c.fill(st);
+
 
         kmint::base_systems base {};
         kmint::board s {};
@@ -50,6 +56,7 @@ int main() {
         search.search(&g,start, end);
         s.add_board_piece(b);
         s.add_board_piece(g);
+        s.add_board_piece(c);
         s.add_board_piece(meneer);
         s.add_board_piece(mevrouw);
 

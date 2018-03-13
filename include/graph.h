@@ -11,6 +11,7 @@
 #include <iostream>
 
 namespace kmint {
+
     using node_id = std::vector<node>::size_type;
     class graph : public free_roaming_board_piece {
         std::vector<node> _nodes;

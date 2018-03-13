@@ -28,7 +28,7 @@ namespace kmint {
                 kmint::bandlit* band =dynamic_cast<kmint::bandlit *>(object);
                 if( band->money <=100){
                     std::cout<< "Geen money om te lopen";
-                  //  object->set_state("sleep");
+                    object->set_state("sleep");
                 }else{
                     band->money = band->money - 20;
                     std::cout<< "money - 20 G";
