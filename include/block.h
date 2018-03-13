@@ -15,7 +15,7 @@ class block{
 
 public:
     color _color;
-    block(point location, int id) : _location {location}, _id {id}, _color{ 0xff, 0x00, 0x00 } {}
+    block(point location, int id, color col) : _location {location}, _id {id}, _color{col } {}
     int id() const noexcept { return _id; }
     point location() const noexcept { return _location; }
 

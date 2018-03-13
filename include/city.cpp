@@ -6,20 +6,46 @@
 namespace kmint {
     void city::fill(std::istream &is) {
         bool reading_nodes = true;
+        int y = 0;
         for(std::string s; std::getline(is, s);) {
             if (s == "") {
                 reading_nodes = false;
                 continue;
             }else{
-                char c;
-                while (is.get(c)){
-                    point p{10,10};
-                    _nodes.emplace_back(p,num_nodes());
+                int x = 0;
+                for (auto c: s ){
+                    point p{x,y};
+                    if(c == 'B'){
+                        _nodes.emplace_back(p,num_nodes(),color { 0x40,0x40,0x40 });
+                    }
+                    if(c == '1'){
+                        _nodes.emplace_back(p,num_nodes(),color { 0xC0,0xC0,0xC0 });
+
+                    }if(c == '2'){
+                        _nodes.emplace_back(p,num_nodes(),color { 0xFF,0xFF,0x00 });
+
+                    }if(c == '3'){
+                        _nodes.emplace_back(p,num_nodes(),color { 0x80,0x00,0x00 });
+
+                    }if(c == 'L'){
+                        _nodes.emplace_back(p,num_nodes(),color { 0xFF,0x00,0x00 });
+
+                    }if(c == 'N'){
+                        _nodes.emplace_back(p,num_nodes(),color { 0x00,0xFF,0x00 });
+
+                    }if(c == 'P'){
+                        _nodes.emplace_back(p,num_nodes(),color {0x00,0x00,0xFF });
+
+                    }if(c == 'C'){
+                        _nodes.emplace_back(p,num_nodes(),color { 0xC0,0x00,0xFF });
+
+                    }
+                    x= x+20;
 
                 }
 
             }
-
+            y = y +20;
 
         }
 
