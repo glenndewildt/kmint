@@ -27,6 +27,8 @@ namespace kmint {
 
         virtual void update(float dt, std::vector< board_piece*> &_board_pieces)
         {
+
+
             update( _board_pieces);
         }
         virtual void update(std::vector< board_piece*> &_board_pieces) {

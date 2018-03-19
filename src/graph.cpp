@@ -6,9 +6,10 @@
 #include <iostream>
 #include <stdexcept>
 #include <utility>
+#include <city.h>
 
 namespace kmint {
-    void graph::fill(std::istream &is) {
+    void graph::fill(std::istream &is, city* city) {
         bool reading_nodes = true;
         for(std::string s; std::getline(is, s);) {
             if (s == "") {
@@ -32,6 +33,13 @@ namespace kmint {
                 float weight;
                 if (iss >> from && iss >> to  && iss >> weight) {
                     auto &from_node = _nodes.at(from);
+
+                    for(auto& locations : city->_nodes){
+                        if((locations.location().x() -20 < this->location().x())&& (locations.location().x() +20 > this->location().x()) && (locations.location().x() -20 < this->location().y())&& (locations.location().y() +20 > this->location().y())){
+                            weight+=locations.weight;
+                            break;
+                        }
+                    }
                     from_node.add_edge({from_node, _nodes.at(to), weight});
                 }
                 else {
