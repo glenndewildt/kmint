@@ -12,7 +12,7 @@
 #include <fstream>
 
 namespace kmint {
-    board::board() : _window { "Hello World!", 10, 10 },
+    board::board() : _window { "Hello World!", 1280, 720 },
                      _renderer { _window } {}
 
     bool hasDied(kmint::board_piece* i)
