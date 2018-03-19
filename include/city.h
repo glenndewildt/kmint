@@ -20,11 +20,11 @@
 namespace kmint {
 
 class city  :public free_roaming_board_piece {
-std::vector<block> _nodes;
     city_drawable _drawable;
 bool mapAnalized = false;
 std::vector<std::vector<bool>> mapAnalysis;
 public:
+    std::vector<block> _nodes;
     city(point location) : free_roaming_board_piece { location }, _nodes {}, _drawable { *this } {};
 void fill(std::istream &is);
 const drawable &get_drawable() const override { return _drawable; }
@@ -39,7 +39,7 @@ decltype(auto) begin() const { return _nodes.begin(); }
 decltype(auto) end() { return _nodes.end(); }
 decltype(auto) end() const { return _nodes.end(); }
 decltype(auto) num_nodes() const { return _nodes.size(); }
-decltype(auto) operator[](node_id id) const { return _nodes[id]; }
+//decltype(auto) operator[](node_id id) const { return _nodes[id]; }
 private:
 void AnalysizeMapStructure() {
     int rowSize = 1280 / 20;

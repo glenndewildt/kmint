@@ -27,11 +27,11 @@ int main() {
     try {
         std::ifstream f { "/home/administrator/Desktop/KMINT/resources/graph.txt" };
         kmint::graph g { kmint::point{0.0f, 0.0f} };
-        g.fill(f);
 
         std::ifstream st { "/home/administrator/Desktop/KMINT/resources/stad.txt" };
         kmint::city c { kmint::point{0.0f, 0.0f} };
         c.fill(st);
+        g.fill(f,&c);
 
 
         kmint::base_systems base {};
@@ -40,9 +40,9 @@ int main() {
 
         kmint::Mrs_Jansen meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
         kmint::Miss_Jansen mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
-        kmint::bandlit t1{ g,66,kmint::image { "resources/poochyena.png", 0.25f }};
-        kmint::bandlit t2{ g,1180,kmint::image { "resources/poochyena.png", 0.25f }};
-        kmint::bandlit t3{ g,520,kmint::image { "resources/poochyena.png", 0.25f }};
+        kmint::bandlit t1{ g,66,kmint::image { "resources/poochyena.png", 0.25f },&c};
+        kmint::bandlit t2{ g,1180,kmint::image { "resources/poochyena.png", 0.25f },&c};
+        kmint::bandlit t3{ g,520,kmint::image { "resources/poochyena.png", 0.25f },&c};
 
         kmint::a_star search;
         kmint::node start = g[445];
