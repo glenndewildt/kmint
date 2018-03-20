@@ -40,9 +40,10 @@ int main() {
 
         kmint::Mrs_Jansen meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
         kmint::Miss_Jansen mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
-        kmint::bandlit t1{ g,66,kmint::image { "resources/poochyena.png", 0.25f },&c};
-        kmint::bandlit t2{ g,1180,kmint::image { "resources/poochyena.png", 0.25f },&c};
-        kmint::bandlit t3{ g,520,kmint::image { "resources/poochyena.png", 0.25f },&c};
+        kmint::bandlit t1{ g,66,kmint::image { "resources/axel.png", 0.25f },&c};
+        kmint::bandlit t2{ g,1180,kmint::image { "resources/frans.png", 0.25f },&c};
+        kmint::bandlit t3{ g,520,kmint::image { "resources/manager.png", 0.25f },&c};
+        kmint::bandlit t4{ g,520,kmint::image { "resources/manager.png", 0.25f }, &c};
 
         kmint::a_star search;
         kmint::node start = g[445];
@@ -53,6 +54,7 @@ int main() {
         t1.add_state(new kmint::wandering_state(&t1),"wandering");
         t2.add_state(new kmint::wandering_state(&t2),"wandering");
         t3.add_state(new kmint::wandering_state(&t3),"wandering");
+        t4.add_state(new kmint::wandering_state(&t4),"wandering");
 
         t1.add_state(new kmint::sleep_state(&t1),"sleep");
         t1.add_state(new kmint::retrieve_state(&t1),"retieve");
@@ -60,18 +62,22 @@ int main() {
         t1.set_state("wandering");
         t2.set_state("wandering");
         t3.set_state("wandering");
+        t4.set_state("wandering");
 
 
         search.search(&g,start, end);
         s.add_board_piece(b);
-        s.add_board_piece(g);
         s.add_board_piece(c);
-        s.add_board_piece(meneer);
-        s.add_board_piece(mevrouw);
+
+        s.add_board_piece(g);
+//        
+//        s.add_board_piece(meneer);
+//        s.add_board_piece(mevrouw);
 
         s.add_board_piece(t1);
         s.add_board_piece(t2);
         s.add_board_piece(t3);
+        s.add_board_piece(t4);
 
 
         std::default_random_engine gen(rand() % 1000);
@@ -80,7 +86,7 @@ int main() {
 
         for (int i = 0; i < 20; i++)
         {
-            kmint::Bunny *bunny = new kmint::Bunny { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/bunnelby.png", 0.33f } };
+            kmint::Bunny *bunny = new kmint::Bunny { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/fan.png", 0.33f } };
             s.add_board_piece(*bunny);
         }
 

@@ -52,7 +52,7 @@ namespace kmint
 
                 nextGen.push_back(new kmint::Bunny{
                         kmint::point { xCord(gen), yCord(gen) },
-                        kmint::image {"resources/bunnelby.png", 0.33f},
+                        kmint::image {"resources/fan.png", 0.33f},
                         pickAts(gen) ? offSpring1->GetAttractionToSheep() : offSpring2->GetAttractionToSheep(),
                         pickAtw(gen) ? offSpring1->GetAttractionToWater() : offSpring2->GetAttractionToWater(),
                         pickCoh(gen) ? offSpring1->GetCohesion() : offSpring2->GetCohesion(),
