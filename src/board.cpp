@@ -56,19 +56,18 @@ namespace kmint {
                 }
             }
 
-            for(auto a : _board_pieces) {
-                a->update(duration, _board_pieces);
+                for (auto a : _board_pieces) {
+                    a->update(duration, _board_pieces);
 
-                if (auto bunny = dynamic_cast<kmint::Bunny*>(a)) {
-                    if (!bunny->hasDied()) {
+                    if (auto bunny = dynamic_cast<kmint::Bunny *>(a)) {
+                        if (!bunny->hasDied()) {
+                            a->get_drawable().draw(_renderer);
+                        }
+                    } else {
                         a->get_drawable().draw(_renderer);
                     }
                 }
-                else
-                {
-                    a->get_drawable().draw(_renderer);
-                }
-            }
+
             _renderer.render();
 
 
