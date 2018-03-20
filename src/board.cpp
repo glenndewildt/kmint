@@ -2,7 +2,7 @@
 #include "point.h"
 #include "board_piece.h"
 #include "drawable.h"
-#include "BunnySpawner.h"
+#include "FanSpawner.h"
 #include <SDL2/SDL.h>
 #include <graph_bound_board_piece.h>
 #include <circle.h>
@@ -44,7 +44,7 @@ namespace kmint {
             // Only remove on new poolCycle
             // @TODO: move and split to a onEntry and onExit on the sleep state of the dog
             if ((int) (duration + 0) % 30 == 0) {
-                BunnySpawner bs(_board_pieces);
+                FanSpawner bs(_board_pieces);
                 auto newPool = bs.GetSpawnPool();
 
                 auto q = std::remove_if(_board_pieces.begin(), _board_pieces.end(), hasDied);

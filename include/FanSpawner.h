@@ -9,7 +9,7 @@
 
 namespace kmint
 {
-    class BunnySpawner
+    class FanSpawner
     {
 
     private:
@@ -23,7 +23,7 @@ namespace kmint
         int maxFitness = 0;
         int minFitness = 0;
     public:
-        BunnySpawner(std::vector<kmint::board_piece*> _boardPieces) {
+        FanSpawner(std::vector<kmint::board_piece*> _boardPieces) {
             for (auto bp : _boardPieces)
                 if (dynamic_cast<kmint::Bunny*>(bp))
                     currentBunnies.push_back(dynamic_cast<kmint::Bunny*>(bp));
