@@ -18,9 +18,11 @@ namespace kmint {
     private:
 
         state_object* object;
+         int next_node_id;
+        int weight;
     public:
 
-        wandering_state(state_object* object): object{object}{};
+        wandering_state(state_object* object): object{object}, next_node_id{-1}{};
         void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
             //check condition if near by bunny
             if (dynamic_cast<kmint::bandlit *>(object)) {
@@ -42,37 +44,50 @@ namespace kmint {
 
         void update() {
             std::cout << "wandering state id = "<< object->get_node_id() << std::endl;
-            std::vector<int> node_ids;
+            std::unordered_map< int,int> node_ids;
+            if(next_node_id != -1){
+                if(weight >0){
+                    std::cout<<"Weight : "<< weight;
+                    weight--;
 
-            for(auto& node : object->get_graph()){
-                if(node.id() == object->get_node_id()){
-                    for(auto& edge : node){
-                        for(auto& edge_node :edge.to()){
-                            std::cout << "edge id = "<< edge_node.to().id()<< std::endl;
+                } else{
+                    object->set_node_id(next_node_id);
+                    next_node_id = -1;
+                }
 
-                            if(edge_node.to().id() != object->get_node_id()){
-                                node_ids.push_back(edge_node.to().id());
+
+            } else{
+                for(auto& node : object->get_graph()){
+                    if(node.id() == object->get_node_id()){
+                        for(auto& edge : node){
+                            for(auto& edge_node :edge.to()){
+                                std::cout << "edge id = "<< edge_node.to().id()<< std::endl;
+
+                                if(edge_node.to().id() != object->get_node_id()){
+                                    node_ids.insert(std::pair<int, int>(edge_node.to().id(), edge.weight()));
+                                }
+
                             }
 
+
                         }
-
-
                     }
                 }
-            }
 
-            std::mt19937 rng;
-            rng.seed(std::random_device()());
-            std::uniform_int_distribution<std::mt19937::result_type> dist6(0,node_ids.size());
-            int number = dist6(rng);
-            int number_index = 0;
-            for(int index : node_ids){
-                if(number_index == number){
-                     object->set_node_id(index);
-
+                std::mt19937 rng;
+                rng.seed(std::random_device()());
+                std::uniform_int_distribution<std::mt19937::result_type> dist6(0,node_ids.size());
+                int number = dist6(rng);
+                int number_index = 0;
+                for(auto& index : node_ids){
+                    if(number_index == number){
+                        next_node_id = index.first;
+                        weight = index.second;
+                    }
+                    number_index++;
                 }
-                number_index++;
             }
+
 
 
         };
