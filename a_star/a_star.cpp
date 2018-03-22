@@ -11,6 +11,54 @@
 
 namespace kmint {
 
+    void a_star::search( graph* begin, node start, node end, bool debug) {
+        std::vector<node> openList;      // Make it priority-able with the F score
+        std::vector<node> closedList;
+
+        openList.emplace_back(start);
+
+        node currentNode = start;
+
+        /**
+         * F Score = Score for square
+         * G score = cost from start to square
+         * H score = estimated cost from square
+         *
+         * H is calculated by pixel difference between the two points using the math.abs function
+         * G is calculated by shortest path
+         */
+
+        do {
+            // @PSEUDO, get node with lowest heuristisk
+
+            // @PSEUDO add this node to closedList
+            // @PSEUDO remove this node from openList
+
+            if (&currentNode == &end) {
+                break; // @TODO?? shouldn't this by a return, i never understood this
+            }
+
+            // std::vector connections = currentNode.getAllConnectedNodes();
+
+            for (auto connection : openList) { // TODO replace openlist by connections
+                //if (closedList.has(connection)) {
+                //    continue;
+                //}
+
+                /*
+                 if (!openlist.has(connection)) {
+                    calculate F score
+                    add it to the openlist
+                 } else {
+                    test if F score get lower by current G score, if yes update parent
+                 }
+                */
+            }
+        } while (!openList.empty());
+
+        // THERE IS NO PATH< OH HELP!
+    }
+
     void a_star::search( graph* begin, node start, node end) {
         std::unordered_map<int, int> dist;
 
