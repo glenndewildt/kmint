@@ -50,7 +50,7 @@ int main() {
 
         kmint::a_star search;
         kmint::node start = g[445];
-        kmint::node end = g[457];
+        kmint::node end = g[700];
         //t.set_point(kmint::point{1000,100});
 
         //add states

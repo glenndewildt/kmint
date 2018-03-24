@@ -12,12 +12,12 @@
 namespace kmint {
 
     void a_star::search( graph* begin, node start, node end, bool debug) {
-        std::vector<node> openList;      // Make it priority-able with the F score
+      //  std::vector<node> openList;      // Make it priority-able with the F score
         //open list priorty list on value
         // Creating & Initializing a map of String & Ints
-        std::map<node, int> mapOfWordCount ;
-        mapOfWordCount.insert(std::pair<node, int>(start,11));
-        mapOfWordCount.insert(std::pair<node, int>(end,10));
+        std::map<node, int> openList ;
+
+
 
 
         // Declaring the type of Predicate that accepts 2 pairs and return a bool
@@ -32,16 +32,17 @@ namespace kmint {
 
         // Declaring a set that will store the pairs using above comparision logic
         std::set<std::pair<node, int>, Comparator> setOfWords(
-                mapOfWordCount.begin(), mapOfWordCount.end(), compFunctor);
+                openList.begin(), openList.end(), compFunctor);
 
         // Iterate over a set using range base for loop
         // It will display the items in sorted order of values
         for (std::pair<node, int> element : setOfWords)
             std::cout << element.first.id() << " :: " << element.second << std::endl;
         // end of priorty list
+
         std::vector<node> closedList;
 
-        openList.emplace_back(start);
+     //   openList.insert(std::pair<node, int>(start,0));
 
         node currentNode = start;
 
@@ -53,12 +54,21 @@ namespace kmint {
          * H is calculated by pixel difference between the two points using the math.abs function
          * G is calculated by shortest path
          */
+        for(edge edges: currentNode){
+            point location = edges.to().location();
+            int h = std::abs(location.x() - end.location().x()) + std::abs(location.y() - end.location().y());
+            int g = edges.weight();
+            int f = h+g;
 
+            openList.insert(std::pair<node,int>(edges.to(),f));
+        }
         do {
             // @PSEUDO, get node with lowest heuristisk
-
+            currentNode = openList.begin()->first;
             // @PSEUDO add this node to closedList
+            closedList.push_back(currentNode);
             // @PSEUDO remove this node from openList
+            openList.erase(currentNode);
 
             if (&currentNode == &end) {
                 break; // @TODO?? shouldn't this by a return, i never understood this
@@ -66,19 +76,48 @@ namespace kmint {
 
             // std::vector connections = currentNode.getAllConnectedNodes();
 
-            for (auto connection : openList) { // TODO replace openlist by connections
-                //if (closedList.has(connection)) {
-                //    continue;
-                //}
+            for (auto connection : currentNode) { // TODO replace openlist by connections
 
-                /*
-                 if (!openlist.has(connection)) {
-                    calculate F score
-                    add it to the openlist
-                 } else {
-                    test if F score get lower by current G score, if yes update parent
-                 }
-                */
+                // if connection is in closed list skip connection
+
+                for(auto& closed: closedList){
+                    if(closed.id() == connection.to().id()){
+                        continue;
+                    }
+                }
+                int result;
+
+                for(auto open: openList){
+                    if(open.first.id() == connection.to().id()){
+                        result = open.second;
+
+                    }
+                }
+                // if connection is in open list skip connection
+                for(auto& open: openList){
+                    if(open.first.id() == connection.to().id()) {
+                        auto location = connection.to().location();
+                        int h = std::abs(location.x() - end.location().x()) +
+                                std::abs(location.y() - end.location().y());
+                        int g = connection.weight();
+                        int f = h + g;
+                        if (result > f) {
+                            result = f;
+                        }
+                        return;
+                    } else{
+                    //if contains. calculate f score and add to open lit
+                    auto location = connection.to().location();
+                    int h = std::abs(location.x() - end.location().x()) + std::abs(location.y() - end.location().y());
+                    int g = connection.weight();
+                    int f = h+g;
+
+                    openList.insert(std::pair<node,int>(connection.to(),f));
+                }
+                }
+
+
+
             }
         } while (!openList.empty());
 
