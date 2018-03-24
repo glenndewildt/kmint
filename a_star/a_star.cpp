@@ -13,6 +13,32 @@ namespace kmint {
 
     void a_star::search( graph* begin, node start, node end, bool debug) {
         std::vector<node> openList;      // Make it priority-able with the F score
+        //open list priorty list on value
+        // Creating & Initializing a map of String & Ints
+        std::map<node, int> mapOfWordCount ;
+        mapOfWordCount.insert(std::pair<node, int>(start,11));
+        mapOfWordCount.insert(std::pair<node, int>(end,10));
+
+
+        // Declaring the type of Predicate that accepts 2 pairs and return a bool
+        typedef std::function<bool(std::pair<node, int>, std::pair<node, int>)> Comparator;
+
+        // Defining a lambda function to compare two pairs. It will compare two pairs using second field
+        Comparator compFunctor =
+                [](std::pair<node, int> elem1 ,std::pair<node, int> elem2)
+                {
+                    return elem1.second < elem2.second;
+                };
+
+        // Declaring a set that will store the pairs using above comparision logic
+        std::set<std::pair<node, int>, Comparator> setOfWords(
+                mapOfWordCount.begin(), mapOfWordCount.end(), compFunctor);
+
+        // Iterate over a set using range base for loop
+        // It will display the items in sorted order of values
+        for (std::pair<node, int> element : setOfWords)
+            std::cout << element.first.id() << " :: " << element.second << std::endl;
+        // end of priorty list
         std::vector<node> closedList;
 
         openList.emplace_back(start);
