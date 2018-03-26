@@ -74,6 +74,7 @@ int main() {
         s.add_board_piece(c);
         s.add_board_piece(meneer);
         s.add_board_piece(mevrouw);
+        s.add_board_piece(g);
 
         s.add_board_piece(t1);
         s.add_board_piece(t2);

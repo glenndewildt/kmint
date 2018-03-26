@@ -11,8 +11,10 @@
 #include <ctime>
 #include <fstream>
 
+#include <unistd.h>
+
 namespace kmint {
-    board::board() : _window { "Hello World!", 10, 10 },
+    board::board() : _window { "Hello World!", 1280, 720 },
                      _renderer { _window } {}
 
     bool hasDied(kmint::board_piece* i)
@@ -26,6 +28,7 @@ namespace kmint {
 
     void board::play() {
         bool playing = true;
+
 
         // timer variable
         std::clock_t start;
@@ -77,6 +80,8 @@ namespace kmint {
             while (SDL_PollEvent(&e)) {
                 playing = (e.type != SDL_QUIT);
             }
+
+            sleep(1);
         }
     }
 
