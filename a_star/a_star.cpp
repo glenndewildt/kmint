@@ -67,7 +67,15 @@ namespace kmint {
             currentNode = openList.begin()->first;
             // @PSEUDO add this node to closedList
             closedList.push_back(currentNode);
-            currentNode._color = color { 0xff, 0xff, 0x00 } ;
+
+            for (auto& j:*begin) {
+                if(j.id() == currentNode.id()){
+                    j._color = color {  0xff, 0xff, 0x00} ;
+
+                }
+
+            }
+            //currentNode._color = color { 0xff, 0xff, 0x00 } ;
             // @PSEUDO remove this node from openList
             openList.erase(currentNode);
 

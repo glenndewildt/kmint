@@ -49,8 +49,8 @@ int main() {
         kmint::bandlit t3{ g,520,kmint::image { "resources/poochyena.png", 0.25f },&c};
 
         kmint::a_star search;
-        kmint::node start = g[445];
-        kmint::node end = g[700];
+        kmint::node start = g[1];
+        kmint::node end = g[1000];
         //t.set_point(kmint::point{1000,100});
 
         //add states
