@@ -38,7 +38,10 @@ namespace kmint {
 
         /* Your algorithm here */
 
+        int frame { 0 };
+
         while(playing) {
+            frame++;
             duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
             _renderer.clear();
@@ -46,7 +49,7 @@ namespace kmint {
 
             // Only remove on new poolCycle
             // @TODO: move and split to a onEntry and onExit on the sleep state of the dog
-            if ((int) (duration + 0) % 30 == 0) {
+            if (frame % 100 == 0) {
                 FanSpawner bs(_board_pieces);
                 auto newPool = bs.GetSpawnPool();
 
