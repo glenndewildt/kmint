@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <graph_bound_board_piece.h>
 #include <circle.h>
-#include <Movable_objects/Bunny/Bunny.h>
+#include <Movable_objects/Fan/Fan.h>
 #include <algorithm>
 #include <ctime>
 #include <fstream>
@@ -19,7 +19,7 @@ namespace kmint {
 
     bool hasDied(kmint::board_piece* i)
     {
-        if (auto bunny = dynamic_cast<kmint::Bunny*>(i)) {
+        if (auto bunny = dynamic_cast<kmint::Fan*>(i)) {
             return true; //return bunny->hasDied();
         }
 
@@ -46,9 +46,6 @@ namespace kmint {
 
             _renderer.clear();
 
-
-            // Only remove on new poolCycle
-            // @TODO: move and split to a onEntry and onExit on the sleep state of the dog
             if (frame % 100 == 0) {
                 FanSpawner bs(_board_pieces);
                 auto newPool = bs.GetSpawnPool();
@@ -62,29 +59,24 @@ namespace kmint {
                 }
             }
 
-                for (auto a : _board_pieces) {
-                    a->update(duration, _board_pieces);
+            for (auto a : _board_pieces) {
+                a->update(duration, _board_pieces);
 
-                    if (auto bunny = dynamic_cast<kmint::Bunny *>(a)) {
-                        if (!bunny->hasDied()) {
-                            a->get_drawable().draw(_renderer);
-                        }
-                    } else {
+                if (auto bunny = dynamic_cast<kmint::Fan *>(a)) {
+                    if (!bunny->hasDied()) {
                         a->get_drawable().draw(_renderer);
                     }
+                } else {
+                    a->get_drawable().draw(_renderer);
                 }
+            }
 
             _renderer.render();
-
-
-
 
             SDL_Event e;
             while (SDL_PollEvent(&e)) {
                 playing = (e.type != SDL_QUIT);
             }
-
-            //sleep(1);
         }
     }
 

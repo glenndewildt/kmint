@@ -10,7 +10,7 @@
 #include "graph_bound_board_piece.h"
 #include <fstream>
 #include <Movable_objects/Cow/Cow.h>
-#include <Movable_objects/Bunny/Bunny.h>
+#include <Movable_objects/Fan/Fan.h>
 #include <circle.h>
 #include <Movable_objects/State/state_object.h>
 #include <Movable_objects/State/wandering_state.h>
@@ -87,8 +87,8 @@ int main() {
 
         for (int i = 0; i < 20; i++)
         {
-            kmint::Bunny *bunny = new kmint::Bunny { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/bunnelby.png", 0.33f } };
-            s.add_board_piece(*bunny);
+            kmint::Fan *fan = new kmint::Fan { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/fan.png", 0.33f } };
+            s.add_board_piece(*fan);
         }
 
         s.play();

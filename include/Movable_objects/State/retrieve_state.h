@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include <board_piece.h>
-#include <bunny.h>
 #include <Movable_objects/Sheep/Sheep.h>
 #include <random>
 #include "base_state.h"

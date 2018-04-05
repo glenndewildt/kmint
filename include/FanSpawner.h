@@ -5,7 +5,7 @@
 #ifndef KMINTFRAMEWORK_BUNNYSPAWNER_H
 #define KMINTFRAMEWORK_BUNNYSPAWNER_H
 
-#include "Movable_objects/Bunny/Bunny.h"
+#include "Movable_objects/Fan/Fan.h"
 
 namespace kmint
 {
@@ -13,7 +13,7 @@ namespace kmint
     {
 
     private:
-        std::vector<kmint::Bunny*> currentBunnies;
+        std::vector<kmint::Fan*> currentBunnies;
         double ats = 0; // storaged average of attractionToSheep where fitness is equal or higher to fitness average
         double atw = 0; // storaged average of attractionToWater where fitness is equal or higher to fitness average
         double coh = 0; // storaged average of cohesion where fitness is equal or higher to fitness average
@@ -25,19 +25,19 @@ namespace kmint
     public:
         FanSpawner(std::vector<kmint::board_piece*> _boardPieces) {
             for (auto bp : _boardPieces)
-                if (dynamic_cast<kmint::Bunny*>(bp))
-                    currentBunnies.push_back(dynamic_cast<kmint::Bunny*>(bp));
+                if (dynamic_cast<kmint::Fan*>(bp))
+                    currentBunnies.push_back(dynamic_cast<kmint::Fan*>(bp));
         }
 
-        std::vector<kmint::Bunny*> GetSpawnPool()
+        std::vector<kmint::Fan*> GetSpawnPool()
         {
             return GeneratePopulation();
         }
 
     private:
-        std::vector<kmint::Bunny*> GeneratePopulation()
+        std::vector<kmint::Fan*> GeneratePopulation()
         {
-            std::vector<kmint::Bunny*> nextGen;
+            std::vector<kmint::Fan*> nextGen;
             nextGen.clear();
 
             while (nextGen.size() < 20) {
@@ -50,9 +50,9 @@ namespace kmint
                 std::uniform_int_distribution<int> xCord(10, 12700);
                 std::uniform_int_distribution<int> yCord(10, 690);
 
-                nextGen.push_back(new kmint::Bunny{
+                nextGen.push_back(new kmint::Fan{
                         kmint::point { xCord(gen), yCord(gen) },
-                        kmint::image {"resources/bunnelby.png", 0.33f},
+                        kmint::image {"resources/fan.png", 0.33f},
                         pickAts(gen) ? offSpring1->GetAttractionToSheep() : offSpring2->GetAttractionToSheep(),
                         pickAtw(gen) ? offSpring1->GetAttractionToWater() : offSpring2->GetAttractionToWater(),
                         pickCoh(gen) ? offSpring1->GetCohesion() : offSpring2->GetCohesion(),
@@ -67,7 +67,7 @@ namespace kmint
         /**
          * @Todo if this doesnt work remove the erase
          */
-        kmint::Bunny* GetRandomOffSpring()
+        kmint::Fan* GetRandomOffSpring()
         {
 
             for (int i = 0; i < 1; i++)

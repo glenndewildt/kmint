@@ -7,7 +7,7 @@
 
 
 #include <Movable_objects/State/state_object.h>
-#include <bunny.h>
+#include <Movable_objects/Fan/Fan.h>
 
 namespace kmint {
         class Miss_Jansen: public state_object {
@@ -25,7 +25,7 @@ namespace kmint {
                 int count = 0;
                 //check condition if near by bunny
                 for (auto bp : _board_pieces) {
-                    if (dynamic_cast<Bunny *>(bp)) {
+                    if (dynamic_cast<Fan *>(bp)) {
 
                         auto loc = bp->location();
 

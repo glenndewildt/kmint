@@ -16,11 +16,11 @@
 
 namespace kmint {
 
-    class Bunny : public free_roaming_board_piece {
+    class Fan : public free_roaming_board_piece {
         image_drawable _drawable;
 
     public:
-        Bunny(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i } {
+        Fan(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i } {
             std::default_random_engine gen(rand() % 10000);
             std::uniform_int_distribution<int> sheep(-1000, 1000);
             std::uniform_int_distribution<int> water(-1000, 1000);
@@ -35,7 +35,7 @@ namespace kmint {
             alignment        = ((double) align(gen) / 1000) +1;
         };
 
-        Bunny(point location, const image &i, double ats, double atw, double coh, double sep, double ali)
+        Fan(point location, const image &i, double ats, double atw, double coh, double sep, double ali)
             : free_roaming_board_piece { location }, _drawable { *this,i }, attractedToSheep(ats + 1), attractedToWater(atw + 1), cohesion(coh + 1), separation(sep + 1), alignment(ali + 1)
         {
             auto debug = false;
@@ -169,7 +169,7 @@ namespace kmint {
             Linal::G2D::Vector vecSum;
             for (auto bp : _board_pieces)
             {
-                if (auto bunny = dynamic_cast<kmint::Bunny*>(bp))
+                if (auto bunny = dynamic_cast<kmint::Fan*>(bp))
                 {
                     if (bunny->hasDied()) continue;
 
@@ -206,7 +206,7 @@ namespace kmint {
             int count = 0;
             for (auto bp : _board_pieces)
             {
-                if (auto bunny = dynamic_cast<kmint::Bunny*>(bp))
+                if (auto bunny = dynamic_cast<kmint::Fan*>(bp))
                 {
                     if (bunny->hasDied()) continue;
 
@@ -245,7 +245,7 @@ namespace kmint {
             Linal::G2D::Vector vecSum;
             for (auto bp : _board_pieces)
             {
-                if (auto bunny = dynamic_cast<kmint::Bunny*>(bp))
+                if (auto bunny = dynamic_cast<kmint::Fan*>(bp))
                 {
                     if (bunny->hasDied()) continue;
 
