@@ -7,8 +7,12 @@
 
 #include <graph.h>
 #include "node.h"
+
 namespace kmint {
-class a_star {
+  using  namespace std;
+
+    class a_star {
+
 public:
     a_star() {};
 
