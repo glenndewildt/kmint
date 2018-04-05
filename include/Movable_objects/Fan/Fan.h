@@ -15,6 +15,29 @@
 #include <Movable_objects/Sheep/Sheep.h>
 
 namespace kmint {
+    class Redefined : public free_roaming_board_piece {
+        image_drawable _drawable;
+    public:
+        Redefined(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i} {
+
+        };
+
+        void update(float dt, std::vector< board_piece*> &_board_pieces) {};
+
+        
+    private:
+        double ata;
+        double atf;
+        double atj;
+        double atx;
+
+        double cohesion;
+        double separation;
+        double alignment;
+
+        int fitness { 0 };
+        bool alive { true };
+    };
 
     class Fan : public free_roaming_board_piece {
         image_drawable _drawable;
@@ -49,11 +72,6 @@ namespace kmint {
 
         void update(float dt, std::vector< board_piece*> &_board_pieces)
         {
-            if (isOnWater(_board_pieces)) {
-                isDead = true;
-                return;
-            }
-
             fitness++;
             auto loc = location();
 
