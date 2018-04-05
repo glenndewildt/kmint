@@ -81,7 +81,7 @@ namespace kmint {
                 playing = (e.type != SDL_QUIT);
             }
 
-            sleep(1);
+            //sleep(1);
         }
     }
 
