@@ -13,7 +13,7 @@
 
 namespace kmint {
 
-    void a_star::search(graph *begin, node start, node end, bool debug) {
+    std::vector<node> a_star::search(graph *begin, node start, node end, bool debug) {
         //  std::vector<node> openList;      // Make it priority-able with the F score
         //open list priorty list on value
         // Creating & Initializing a map of String & Ints
@@ -40,7 +40,7 @@ namespace kmint {
         for (std::pair<node, int> element : setOfWords)
             std::cout << element.first.id() << " :: " << element.second << std::endl;
         // end of priorty list
-
+        vector<node> path;
         std::vector<node> closedList;
 
         //   openList.insert(std::pair<node, int>(start,0));
@@ -64,6 +64,7 @@ namespace kmint {
             openList.insert(std::pair<node, int>(edges.to(), f));
         }
         do {
+
             // @PSEUDO, get node with lowest heuristisk
             currentNode = openList.begin()->first;
             // @PSEUDO add this node to closedList
@@ -81,7 +82,7 @@ namespace kmint {
             openList.erase(currentNode);
 
             if (currentNode.id() == end.id()) {
-                return; // @TODO?? shouldn't this by a return, i never understood this
+                return path; // @TODO?? shouldn't this by a return, i never understood this
             }
 
             // std::vector connections = currentNode.getAllConnectedNodes();
@@ -108,6 +109,7 @@ namespace kmint {
                 // if connection is in open list skip connection
                  it = openList.find(connection.to());
                 if (it != openList.end()){
+
                     auto location = connection.to().location();
                 int h = std::abs(location.x() - end.location().x()) +
                         std::abs(location.y() - end.location().y());
@@ -144,8 +146,6 @@ namespace kmint {
 
 
             }
-            openList.erase(currentNode);
-            closedList.push_back(currentNode);
         } while (!openList.empty());
 
         // THERE IS NO PATH< OH HELP!

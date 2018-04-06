@@ -9,6 +9,7 @@
 #include <iostream>
 #include <Movable_objects/Bunny/Bunny.h>
 #include <Movable_objects/Bandlit/bandlit.h>
+#include <Movable_objects/Manager/Manager.h>
 #include "base_state.h"
 #include "state_object.h"
 
@@ -28,9 +29,17 @@ namespace kmint {
             if (dynamic_cast<kmint::bandlit *>(object)) {
 
                 kmint::bandlit* band =dynamic_cast<kmint::bandlit *>(object);
-                if( band->money <=100){
+                if( band->money <= 900){
                     std::cout<< "Geen money om te lopen";
-                  //  object->set_state("sleep");
+                    for (auto bp : _board_pieces) {
+                        if (dynamic_cast<Manager *>(bp)) {
+
+                            kmint::Manager* man =dynamic_cast<kmint::Manager *>(bp);
+                            man->call_manager(1);
+
+                        }
+
+                    }                  //  object->set_state("sleep");
                 }else{
                     band->money = band->money - 20;
                     std::cout<< "money - 20 G";

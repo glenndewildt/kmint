@@ -31,7 +31,7 @@ void city_drawable::draw(const renderer &r) const {
         auto x = graph_loc.x() + n.location().x();
         auto y = graph_loc.y() + n.location().y();
 
-        r.draw_rect({x - 20, y - 20 },
+        r.draw_rect({x , y  },
                     {x + 20, y + 20 });
 
 

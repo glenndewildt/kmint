@@ -27,15 +27,9 @@ namespace kmint {
             float difference = dt - time;
 
 
+            state_object::update( _board_pieces);
 
 
-            if(difference > 0.2){
-                state_object::update( _board_pieces);
-
-                time = dt;
-
-            }else{
-            }
 
 
         }
