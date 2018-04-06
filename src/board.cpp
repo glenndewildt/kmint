@@ -47,25 +47,25 @@ namespace kmint {
             _renderer.clear();
 
             if (frame % 100 == 0) {
-                FanSpawner bs(_board_pieces);
-                auto newPool = bs.GetSpawnPool();
+                //FanSpawner bs(_board_pieces);
+                //auto newPool = bs.GetSpawnPool();
 
-                auto q = std::remove_if(_board_pieces.begin(), _board_pieces.end(), hasDied);
-                _board_pieces.erase(q, _board_pieces.end());
+                //auto q = std::remove_if(_board_pieces.begin(), _board_pieces.end(), hasDied);
+                //_board_pieces.erase(q, _board_pieces.end());
 
-                for (auto &nb : newPool)
-                {
-                    _board_pieces.push_back(&*nb);
-                }
+                //for (auto &nb : newPool)
+                //{
+                //    _board_pieces.push_back(&*nb);
+                //}
             }
 
             for (auto a : _board_pieces) {
                 a->update(duration, _board_pieces);
 
-                if (auto bunny = dynamic_cast<kmint::Fan *>(a)) {
-                    if (!bunny->hasDied()) {
+                if (auto bunny = dynamic_cast<kmint::Redefined *>(a)) {
+                    //if (!bunny->hasDied()) {
                         a->get_drawable().draw(_renderer);
-                    }
+                    //}
                 } else {
                     a->get_drawable().draw(_renderer);
                 }

@@ -18,14 +18,37 @@ namespace kmint {
     class Redefined : public free_roaming_board_piece {
         image_drawable _drawable;
     public:
-        Redefined(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i} {
+        Redefined(point location, const image &i);
 
-        };
+        const drawable &get_drawable() const override { return _drawable; }
 
-        void update(float dt, std::vector< board_piece*> &_board_pieces) {};
+        void update(float dt, std::vector< board_piece*> &_board_pieces);
 
-        
+        double getAttractionToAndre() const;
+        double getAttractionToAxel() const;
+        double getAttractionToFrans() const;
+        double getAttractionToJohnnie() const;
+
+        double getCohesion() const;
+        double getSeparation() const;
+        double getAlignment() const;
+
+
+        Redefined& setAttractionToAndre(double);
+        Redefined& setAttractionToAxel(double);
+        Redefined& setAttractionToFrans(double);
+        Redefined& setAttractionToJohnnie(double);
+
+        Redefined& setCohesion(double);
+        Redefined& setSeparation(double);
+        Redefined& setAlignment(double);
+
+
     private:
+        Linal::G2D::Vector GetCohesionVec(std::vector< board_piece*> _board_pieces);
+        Linal::G2D::Vector GetSeparationVec(std::vector< board_piece*> _board_pieces);
+        Linal::G2D::Vector GetAlignmentVec(std::vector< board_piece*> _board_pieces);
+
         double ata;
         double atf;
         double atj;

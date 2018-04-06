@@ -96,7 +96,7 @@ int main() {
 
         for (int i = 0; i < 20; i++)
         {
-            kmint::Fan *fan = new kmint::Fan { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/fan.png", 0.33f } };
+            kmint::Redefined *fan = new kmint::Redefined { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/fan.png", 0.33f } };
             s.add_board_piece(*fan);
         }
 
