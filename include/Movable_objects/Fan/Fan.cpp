@@ -3,5 +3,5 @@
 //
 
 #include <image.h>
-#include "Bunny.h"
+#include "Fan.h"
 

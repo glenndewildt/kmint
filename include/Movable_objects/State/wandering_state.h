@@ -7,7 +7,7 @@
 
 
 #include <iostream>
-#include <Movable_objects/Bunny/Bunny.h>
+#include <Movable_objects/Fan/Fan.h>
 #include <Movable_objects/Bandlit/bandlit.h>
 #include <Movable_objects/Manager/Manager.h>
 #include "base_state.h"

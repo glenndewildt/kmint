@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <board_piece.h>
-#include <bunny.h>
+#include "../Fan/Fan.h"
 #include "base_state.h"
 #include "state_object.h"
 
@@ -26,7 +26,7 @@ namespace kmint {
 
             //check condition if near by bunny
             for (auto bp : _board_pieces) {
-                if (dynamic_cast<Bunny *>(bp)) {
+                if (dynamic_cast<Fan *>(bp)) {
 
                     auto loc = bp->location();
 
