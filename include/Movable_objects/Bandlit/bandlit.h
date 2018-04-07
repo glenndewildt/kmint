@@ -10,10 +10,16 @@
 
 namespace kmint {
     class bandlit: public state_object {
+
+
+
     private:
         city* stad;
 
     public:
+        enum Name { AXEL, ANDRE, FRANS, JOHNNIE };
+
+        Name name;
         int money;
         double pause;
         double time;
@@ -21,7 +27,7 @@ namespace kmint {
         int des_node_id;
 
 
-        bandlit(const graph &graph, node_id nid, const image &i, city* city):stad{city},pause{0},time{0}, wait{0},money{1000},state_object(graph,nid,i){
+        bandlit(const graph &graph, node_id nid, const image &i, city* city, Name name ):name{name},stad{city},pause{0},time{0}, wait{0},money{1000},state_object(graph,nid,i){
         };
 
         virtual void update(float dt, std::vector< board_piece*> &_board_pieces)override {

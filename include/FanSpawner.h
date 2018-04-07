@@ -13,7 +13,7 @@ namespace kmint
     {
 
     private:
-        std::vector<kmint::Fan*> currentBunnies;
+        std::vector<kmint::Old*> currentBunnies;
         double ats = 0; // storaged average of attractionToSheep where fitness is equal or higher to fitness average
         double atw = 0; // storaged average of attractionToWater where fitness is equal or higher to fitness average
         double coh = 0; // storaged average of cohesion where fitness is equal or higher to fitness average
@@ -25,19 +25,19 @@ namespace kmint
     public:
         FanSpawner(std::vector<kmint::board_piece*> _boardPieces) {
             for (auto bp : _boardPieces)
-                if (dynamic_cast<kmint::Fan*>(bp))
-                    currentBunnies.push_back(dynamic_cast<kmint::Fan*>(bp));
+                if (dynamic_cast<kmint::Old*>(bp))
+                    currentBunnies.push_back(dynamic_cast<kmint::Old*>(bp));
         }
 
-        std::vector<kmint::Fan*> GetSpawnPool()
+        std::vector<kmint::Old*> GetSpawnPool()
         {
             return GeneratePopulation();
         }
 
     private:
-        std::vector<kmint::Fan*> GeneratePopulation()
+        std::vector<kmint::Old*> GeneratePopulation()
         {
-            std::vector<kmint::Fan*> nextGen;
+            std::vector<kmint::Old*> nextGen;
             nextGen.clear();
 
             while (nextGen.size() < 20) {
@@ -50,7 +50,7 @@ namespace kmint
                 std::uniform_int_distribution<int> xCord(10, 12700);
                 std::uniform_int_distribution<int> yCord(10, 690);
 
-                nextGen.push_back(new kmint::Fan{
+                nextGen.push_back(new kmint::Old{
                         kmint::point { xCord(gen), yCord(gen) },
                         kmint::image {"resources/fan.png", 0.33f},
                         pickAts(gen) ? offSpring1->GetAttractionToSheep() : offSpring2->GetAttractionToSheep(),
@@ -67,7 +67,7 @@ namespace kmint
         /**
          * @Todo if this doesnt work remove the erase
          */
-        kmint::Fan* GetRandomOffSpring()
+        kmint::Old* GetRandomOffSpring()
         {
 
             for (int i = 0; i < 1; i++)

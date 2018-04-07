@@ -48,9 +48,10 @@ int main() {
 
 //        kmint::Mrs_Jansen meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
 //        kmint::Miss_Jansen mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
-        kmint::bandlit t1{ g,120,kmint::image { "resources/poochyena.png", 0.25f },&c};
-        kmint::bandlit t2{ g,624,kmint::image { "resources/poochyena.png", 0.25f },&c};
-        kmint::bandlit t3{ g,1377,kmint::image { "resources/poochyena.png", 0.25f },&c};
+        kmint::bandlit t1{ g,120,kmint::image { "resources/poochyena.png", 0.25f },&c, kmint::bandlit::AXEL};
+        kmint::bandlit t2{ g,624,kmint::image { "resources/poochyena.png", 0.25f },&c, kmint::bandlit::ANDRE};
+        kmint::bandlit t3{ g,1377,kmint::image { "resources/poochyena.png", 0.25f },&c, kmint::bandlit::FRANS};
+        kmint::bandlit t4{ g,236,kmint::image { "resources/poochyena.png", 0.25f },&c, kmint::bandlit::JOHNNIE};
         kmint::Manager man {g,573,kmint::image { "resources/meneerjanssen.png", 0.25f },&c};
 
 
@@ -63,15 +64,18 @@ int main() {
         t1.add_state(new kmint::wandering_state(&t1),"wandering");
         t2.add_state(new kmint::wandering_state(&t2),"wandering");
         t3.add_state(new kmint::wandering_state(&t3),"wandering");
+        t4.add_state(new kmint::wandering_state(&t4),"wandering");
         man.add_state(new kmint::wandering_state(&man),"wandering");
 
         t1.add_state(new kmint::wait(&t1),"wait");
         t2.add_state(new kmint::wait(&t2),"wait");
         t3.add_state(new kmint::wait(&t3),"wait");
+        t4.add_state(new kmint::wait(&t4),"wait");
 
         t1.add_state(new kmint::work(&t1),"work");
         t2.add_state(new kmint::work(&t2),"work");
         t3.add_state(new kmint::work(&t3),"work");
+        t4.add_state(new kmint::work(&t4),"work");
 
         man.add_state(new kmint::go_to_bandlit(&man),"go_to_bandlit");
 
@@ -82,6 +86,7 @@ int main() {
         t1.set_state("wandering");
         t2.set_state("wandering");
         t3.set_state("wandering");
+        t4.set_state("wandering");
         man.set_state("wandering");
 
 
@@ -98,6 +103,7 @@ int main() {
         s.add_board_piece(t1);
         s.add_board_piece(t2);
         s.add_board_piece(t3);
+        s.add_board_piece(t4);
         s.add_board_piece(man);
 
 
@@ -107,7 +113,7 @@ int main() {
 
         for (int i = 0; i < 20; i++)
         {
-            kmint::Redefined *fan = new kmint::Redefined { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/fan.png", 0.33f } };
+            kmint::Fan *fan = new kmint::Fan { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/fan.png", 0.33f } };
             s.add_board_piece(*fan);
         }
 
