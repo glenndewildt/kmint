@@ -26,9 +26,6 @@ namespace kmint {
         virtual void update(float dt, std::vector< board_piece*> &_board_pieces)override {
             float difference = dt - time;
 
-
-
-
             if(difference > 0.2){
                 state_object::update( _board_pieces);
 
