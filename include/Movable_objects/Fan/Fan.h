@@ -52,6 +52,11 @@ namespace kmint {
         std::vector<Linal::G2D::Vector> separationForces;
         std::vector<Linal::G2D::Vector> alignmentForces;
 
+        Linal::G2D::Vector toAxel = {0, 0};
+        Linal::G2D::Vector toAndre = {0, 0};
+        Linal::G2D::Vector toFrans = {0, 0};
+        Linal::G2D::Vector toJohnnie = {0, 0};
+
         Fan& setVelocity(Linal::G2D::Vector);
 
         Linal::G2D::Vector velocity { 0, 0 };

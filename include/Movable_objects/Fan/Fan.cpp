@@ -40,7 +40,7 @@ void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
     alignmentVec = alignmentVec.GetUnitVector() * alignment;
     separationVec = separationVec.GetUnitVector() * separation;
 
-    vec = (cohesionVec + alignmentVec + separationVec).GetUnitVector();
+    vec = (cohesionVec + alignmentVec + separationVec + toAxel.GetUnitVector() + toAndre.GetUnitVector() + toFrans.GetUnitVector() + toJohnnie.GetUnitVector()).GetUnitVector();
     auto loc = location();
 
     auto newloc = kmint::point{ round(vec.x()) + loc.x(), round(vec.y()) + loc.y() };
@@ -55,6 +55,11 @@ void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
     cohesionForces.clear();
     separationForces.clear();
     alignmentForces.clear();
+
+    toAxel = {0, 0};
+    toAndre = {0, 0};
+    toFrans = {0, 0};
+    toJohnnie = {0, 0};
 }
 
 /******************************
@@ -97,17 +102,23 @@ void Fan::scanForNearbyFans(std::vector< board_piece*> &_board_pieces)
             {
                 switch (fo->name) {
                     case kmint::bandlit::ANDRE:
-
+                        if (attractedToAndreActive)
+                            toAndre = {loc.x() - foLoc.x(), loc.y() - foLoc.y()};
                         break;
                     case kmint::bandlit::AXEL:
-
+                        if (attractedToAxelActive)
+                            toAxel = {loc.x() - foLoc.x(), loc.y() - foLoc.y()};
                         break;
                     case kmint::bandlit::FRANS:
-
+                        if (attractedToFransActive)
+                            toFrans = {loc.x() - foLoc.x(), loc.y() - foLoc.y()};
                         break;
                     case kmint::bandlit::JOHNNIE:
-                        if (dist <= johnniedeadzone)
+                        if (dist <= johnniedeadzone && heresjohnniemode)
                             isAlive = false;
+                        else
+                            if (attractedToJohnnieActive)
+                                toJohnnie = {loc.x() - foLoc.x(), loc.y() - foLoc.y()};
 
                         break;
                 }
