@@ -12,12 +12,20 @@ static bool attractedToAxelActive { false };
 static bool attractedToFransActive { false };
 static bool attractedToJohnnieActive { false };
 
+static double cohesionDistance { 100 };
+static double alignmentDistance { 50 };
+static double separationDistance { 50 };
+
 static bool cohesionActive { true };
+static bool alignmentActive { true };
 static bool separationActive { true };
-static bool alignmentActive { false };
 
 static double getCoordDifference(double x1, double y1, double x2, double y2) {
     return std::abs((x2 - x1) + (y2 - y1));
+}
+
+static double getCoordDifference(kmint::point left, kmint::point right) {
+    return std::abs((left.x() - right.x()) + (left.y() - right.y()));
 }
 
 #endif //KMINTFRAMEWORK_GLOBALS_HPP

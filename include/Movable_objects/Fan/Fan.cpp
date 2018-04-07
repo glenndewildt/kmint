@@ -8,24 +8,31 @@
 
 using namespace kmint;
 
-Redefined::Redefined(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i}, ata { 1 }, atf { 1 }, atj { 1 }, atx { 1 }, cohesion{1}, separation{1}, alignment{1}{
+Fan::Fan(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i}, ata { 1 }, atf { 1 }, atj { 1 }, atx { 1 }, cohesion{1}, separation{1}, alignment{1}{
 
 }
 
-void kmint::Redefined::update(float dt, std::vector<board_piece *> &_board_pieces) {
-    auto vec = Linal::G2D::Vector(0, 0);
+void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
+    double xDirection = 0;
+    double yDirection = 0;
 
-    if (attractedToAndreActive) vec += Linal::G2D::Vector(5, 5);
-    if (attractedToAxelActive) vec += Linal::G2D::Vector(-5, -5);
-    if (attractedToFransActive) vec += Linal::G2D::Vector(-5, 5);
-    if (attractedToJohnnieActive) vec += Linal::G2D::Vector(5, -5);
+    scanForNearbyFans(_board_pieces);
+    auto vec = Linal::G2D::Vector(xDirection, yDirection);
 
-    if (cohesionActive)
-        vec += GetCohesionVec(_board_pieces) * cohesion;
-    if (separationActive)
-        vec += GetSeparationVec(_board_pieces) * separation;
-    if (alignmentActive)
-        vec += GetAlignmentVec(_board_pieces) * alignment;
+    for (auto coh : cohesionForces) {
+        vec.x((vec.x() - coh.x()) * cohesion);
+        vec.y((vec.y() - coh.y()) * cohesion);
+    }
+
+    for (auto sep : separationForces) {
+        vec.x((vec.x() - sep.x()) * separation);
+        vec.y((vec.y() - sep.y()) * separation);
+    }
+
+    for (auto ali : alignmentForces) {
+        vec.x((vec.x() - ali.x()) * alignment);
+        vec.y((vec.y() - ali.y()) * alignment);
+    }
 
     vec = vec.GetUnitVector();
     auto loc = location();
@@ -36,12 +43,51 @@ void kmint::Redefined::update(float dt, std::vector<board_piece *> &_board_piece
     if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 710) newloc.y(710);
 
     set_point(newloc);
+
+    setVelocity(vec);
+
+    cohesionForces.clear();
+    separationForces.clear();
+    alignmentForces.clear();
+}
+
+/******************************
+* SCANNING OF THE NEARBY AREA *
+******************************/
+void Fan::scanForNearbyFans(std::vector< board_piece*> &_board_pieces)
+{
+    auto loc = location();
+
+    for (auto bp : _board_pieces)
+    {
+        if (bp == this) continue; // Skip yourself
+
+        if (auto fo = dynamic_cast<kmint::Fan*>(bp))
+        {
+            if (!fo->isAlive) continue; // Leave the dead alone
+
+            auto foLoc = fo->location();
+            auto dist = getCoordDifference(foLoc, loc);
+
+            if (cohesionActive && dist <= cohesionDistance) {
+                cohesionForces.push_back({loc.x() - foLoc.x(), loc.y() - foLoc.y()});
+            }
+
+            if (separationActive && dist <= separationDistance) {
+                separationForces.push_back({dist - (loc.x() - foLoc.x()), dist - ( loc.y() - foLoc.y())});
+            }
+
+            if (alignmentActive && dist <= alignmentDistance) {
+                alignmentForces.push_back(fo->getVelocity());
+            }
+        }
+    }
 }
 
 /***********************
 * CALCULATION OF STUFF *
-***********************/
-Linal::G2D::Vector Redefined::GetCohesionVec(std::vector< board_piece*> _board_pieces) {
+***********************
+Linal::G2D::Vector GetCohesionVec(std::vector< board_piece*> _board_pieces) {
     auto loc = location();
     auto vec = Linal::G2D::Vector(loc.x(), loc.y());
 
@@ -49,9 +95,9 @@ Linal::G2D::Vector Redefined::GetCohesionVec(std::vector< board_piece*> _board_p
     Linal::G2D::Vector vecSum;
     for (auto bp : _board_pieces)
     {
-        if (auto bunny = dynamic_cast<kmint::Redefined*>(bp))
+        if (auto foreignObject = dynamic_cast<kmint::Fan*>(bp))
         {
-            //if (bunny->hasDied()) continue;
+            //if (foreignObject->hasDied()) continue;
 
             auto targetLoc = bp->location();
             if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
@@ -60,7 +106,7 @@ Linal::G2D::Vector Redefined::GetCohesionVec(std::vector< board_piece*> _board_p
             auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
 
             auto diff = (targetLoc - loc);
-            if (std::abs(diff.x()) + std::abs(diff.y()) > 400)
+            if (std::abs(diff.x()) + std::abs(diff.y()) > cohesionDistance)
                 continue;
 
             vecSum = vecSum + targetVec;
@@ -78,7 +124,7 @@ Linal::G2D::Vector Redefined::GetCohesionVec(std::vector< board_piece*> _board_p
     return Linal::G2D::Vector(0, 0);
 }
 
-Linal::G2D::Vector Redefined::GetSeparationVec(std::vector< board_piece*> _board_pieces) {
+Linal::G2D::Vector GetSeparationVec(std::vector< board_piece*> _board_pieces) {
     auto loc = location();
     auto vec = Linal::G2D::Vector(loc.x(), loc.y());
 
@@ -86,9 +132,9 @@ Linal::G2D::Vector Redefined::GetSeparationVec(std::vector< board_piece*> _board
     int count = 0;
     for (auto bp : _board_pieces)
     {
-        if (auto bunny = dynamic_cast<kmint::Redefined*>(bp))
+        if (auto foreignObject = dynamic_cast<kmint::Fan*>(bp))
         {
-            //if (bunny->hasDied()) continue;
+            //if (foreignObject->hasDied()) continue;
 
             auto targetLoc = bp->location();
             if (loc.x() == targetLoc.x() && loc.y() == targetLoc.y())
@@ -98,7 +144,7 @@ Linal::G2D::Vector Redefined::GetSeparationVec(std::vector< board_piece*> _board
 
             auto diffVec = targetVec - vec;
 
-            if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < 65)
+            if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < separationDistance)
             {
                 targetVecSum = targetVecSum + targetVec;
                 count++;
@@ -110,14 +156,14 @@ Linal::G2D::Vector Redefined::GetSeparationVec(std::vector< board_piece*> _board
     if (count > 0)
     {
         auto diffVec = (targetVecSum / count) - vec;
-        return (vec - (targetVecSum / count)).GetUnitVector() * (65 - (std::abs(diffVec.x() + std::abs(diffVec.y()))));
+        return (vec - (targetVecSum / count)).GetUnitVector() * (separationDistance + (std::abs(diffVec.x() + std::abs(diffVec.y()))));
     }
 
 
     return Linal::G2D::Vector(0, 0);
 }
 
-Linal::G2D::Vector Redefined::GetAlignmentVec(std::vector< board_piece*> _board_pieces) {
+Linal::G2D::Vector GetAlignmentVec(std::vector< board_piece*> _board_pieces) {
     auto loc = location();
     auto vec = Linal::G2D::Vector(loc.x(), loc.y());
 
@@ -125,19 +171,19 @@ Linal::G2D::Vector Redefined::GetAlignmentVec(std::vector< board_piece*> _board_
     Linal::G2D::Vector vecSum;
     for (auto bp : _board_pieces)
     {
-        if (auto bunny = dynamic_cast<kmint::Redefined*>(bp))
+        if (auto foreignObject = dynamic_cast<kmint::Fan*>(bp))
         {
             //if (bunny->hasDied()) continue;
 
-            auto targetLoc = bunny->location();
+            auto targetLoc = foreignObject->location();
             if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
                 continue;
 
             auto diff = (targetLoc - loc);
-            if (std::abs(diff.x()) + std::abs(diff.y()) > 150)
+            if (std::abs(diff.x()) + std::abs(diff.y()) > alignmentDistance)
                 continue;
 
-            //vecSum = vecSum + bunny->GetVelocity();
+            //vecSum = vecSum + foreignObject->GetVelocity();
             sumCount++;
         }
     }
@@ -155,38 +201,74 @@ Linal::G2D::Vector Redefined::GetAlignmentVec(std::vector< board_piece*> _board_
 /**********************
 * GETTERS AND SETTERS *
 **********************/
-double Redefined::getAttractionToAndre() const {
+Linal::G2D::Vector Fan::getVelocity() const {
+    return velocity;
+}
+
+Fan& Fan::setVelocity(Linal::G2D::Vector velocity) {
+    this->velocity = velocity;
+    return *this;
+}
+
+double Fan::getAttractionToAndre() const {
     return ata;
 }
 
-Redefined& Redefined::setAttractionToAndre(double ata) {
+Fan& Fan::setAttractionToAndre(double ata) {
     this->ata = ata;
     return *this;
 }
 
-double Redefined::getAttractionToAxel() const {
+double Fan::getAttractionToAxel() const {
     return atx;
 }
 
-Redefined& Redefined::setAttractionToAxel(double atx) {
+Fan& Fan::setAttractionToAxel(double atx) {
     this->atx = atx;
     return *this;
 }
 
-double Redefined::getAttractionToFrans() const {
+double Fan::getAttractionToFrans() const {
     return atf;
 }
 
-Redefined& Redefined::setAttractionToFrans(double atf) {
+Fan& Fan::setAttractionToFrans(double atf) {
     this->atf = atf;
     return *this;
 }
 
-double Redefined::getAttractionToJohnnie() const {
+double Fan::getAttractionToJohnnie() const {
     return atj;
 }
 
-Redefined& Redefined::setAttractionToJohnnie(double atj) {
+Fan& Fan::setAttractionToJohnnie(double atj) {
     this->atj = atj;
+    return *this;
+}
+
+double Fan::getCohesion() const {
+    return cohesion;
+}
+
+Fan& Fan::setCohesion(double cohestion) {
+    this->cohesion = cohesion;
+    return *this;
+}
+
+double Fan::getSeparation() const {
+    return separation;
+}
+
+Fan& Fan::setSeparation(double separation) {
+    this->separation = separation;
+    return *this;
+}
+
+double Fan::getAlignment() const {
+    return alignment;
+}
+
+Fan& Fan::setAlignment(double alignment) {
+    this->alignment = alignment;
     return *this;
 }
