@@ -44,6 +44,7 @@ namespace kmint {
         Fan& setSeparation(double);
         Fan& setAlignment(double);
 
+        bool isAlive { true };
     private:
         void scanForNearbyFans(std::vector< board_piece*> &_board_pieces);
 
@@ -53,7 +54,7 @@ namespace kmint {
 
         Fan& setVelocity(Linal::G2D::Vector);
 
-        Linal::G2D::Vector velocity { 10, -10 };
+        Linal::G2D::Vector velocity { 0, 0 };
 
         double ata;
         double atf;
@@ -65,7 +66,6 @@ namespace kmint {
         double alignment;
 
         int fitness { 0 };
-        bool isAlive { true };
     };
 
     class Old : public free_roaming_board_piece {

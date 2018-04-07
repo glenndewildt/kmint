@@ -8,6 +8,8 @@
 #include "background.h"
 #include "image.h"
 #include "graph_bound_board_piece.h"
+#include <globals.hpp>
+
 #include <fstream>
 #include <Movable_objects/Cow/Cow.h>
 #include <Movable_objects/Fan/Fan.h>
@@ -48,11 +50,11 @@ int main() {
 
 //        kmint::Mrs_Jansen meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
 //        kmint::Miss_Jansen mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
-        kmint::bandlit t1{ g,120,kmint::image { "resources/poochyena.png", 0.25f },&c, kmint::bandlit::AXEL};
-        kmint::bandlit t2{ g,624,kmint::image { "resources/poochyena.png", 0.25f },&c, kmint::bandlit::ANDRE};
-        kmint::bandlit t3{ g,1377,kmint::image { "resources/poochyena.png", 0.25f },&c, kmint::bandlit::FRANS};
-        kmint::bandlit t4{ g,236,kmint::image { "resources/poochyena.png", 0.25f },&c, kmint::bandlit::JOHNNIE};
-        kmint::Manager man {g,573,kmint::image { "resources/meneerjanssen.png", 0.25f },&c};
+        kmint::bandlit t1{ g,120,kmint::image { "resources/axel.png", 0.25f },&c, kmint::bandlit::AXEL};
+        kmint::bandlit t2{ g,624,kmint::image { "resources/andre.png", 0.025f },&c, kmint::bandlit::ANDRE};
+        kmint::bandlit t3{ g,1377,kmint::image { "resources/frans.png", 0.25f },&c, kmint::bandlit::FRANS};
+        kmint::bandlit t4{ g,236,kmint::image { "resources/johnnie.png", 0.02f },&c, kmint::bandlit::JOHNNIE};
+        kmint::Manager man {g,573,kmint::image { "resources/manager.png", 0.25f },&c};
 
 
         kmint::a_star search;
@@ -111,9 +113,9 @@ int main() {
         std::uniform_int_distribution<int> xCord(10, 1270);
         std::uniform_int_distribution<int> yCord(10, 690);
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < fansToSpawn; i++)
         {
-            kmint::Fan *fan = new kmint::Fan { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/fan.png", 0.33f } };
+            kmint::Fan *fan = new kmint::Fan { kmint::point { xCord(gen) , yCord(gen) }, kmint::image { "resources/xsfan.png", 1.00f } };
             s.add_board_piece(*fan);
         }
 

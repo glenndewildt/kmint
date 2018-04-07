@@ -62,10 +62,10 @@ namespace kmint {
             for (auto a : _board_pieces) {
                 a->update(duration, _board_pieces);
 
-                if (auto bunny = dynamic_cast<kmint::Fan *>(a)) {
-                    //if (!bunny->hasDied()) {
+                if (auto fan = dynamic_cast<kmint::Fan *>(a)) {
+                    if (fan->isAlive) {
                         a->get_drawable().draw(_renderer);
-                    //}
+                    }
                 } else {
                     a->get_drawable().draw(_renderer);
                 }
