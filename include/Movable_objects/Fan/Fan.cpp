@@ -13,28 +13,33 @@ Fan::Fan(point location, const image &i) : free_roaming_board_piece { location }
 }
 
 void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
-    double xDirection = 0;
-    double yDirection = 0;
-
     scanForNearbyFans(_board_pieces);
-    auto vec = Linal::G2D::Vector(xDirection, yDirection);
+    auto vec = Linal::G2D::Vector(0, 0);
+
+    Linal::G2D::Vector cohesionVec { Linal::G2D::Vector{ 0 , 0 }};
+    Linal::G2D::Vector alignmentVec { Linal::G2D::Vector{ 0 , 0 }};
+    Linal::G2D::Vector separationVec { Linal::G2D::Vector{ 0 , 0 }};
 
     for (auto coh : cohesionForces) {
-        vec.x((vec.x() - coh.x()) * cohesion);
-        vec.y((vec.y() - coh.y()) * cohesion);
+        cohesionVec.x((cohesionVec.x() - coh.x()) * cohesion);
+        cohesionVec.y((cohesionVec.y() - coh.y()) * cohesion);
     }
 
     for (auto sep : separationForces) {
-        vec.x((vec.x() - sep.x()) * separation);
-        vec.y((vec.y() - sep.y()) * separation);
+        separationVec.x((separationVec.x() - sep.x()) * separation);
+        separationVec.y((separationVec.y() - sep.y()) * separation);
     }
 
     for (auto ali : alignmentForces) {
-        vec.x((vec.x() - ali.x()) * alignment);
-        vec.y((vec.y() - ali.y()) * alignment);
+        alignmentVec.x((alignmentVec.x() - ali.x()) * alignment);
+        alignmentVec.y((alignmentVec.y() - ali.y()) * alignment);
     }
 
-    vec = vec.GetUnitVector();
+    cohesionVec = cohesionVec.GetUnitVector();
+    alignmentVec = alignmentVec.GetUnitVector();
+    separationVec = separationVec.GetUnitVector();
+
+    vec = (alignmentVec + cohesionVec + separationVec).GetUnitVector();
     auto loc = location();
 
     auto newloc = kmint::point{ round(vec.x()) + loc.x(), round(vec.y()) + loc.y() };
@@ -44,7 +49,7 @@ void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
 
     set_point(newloc);
 
-    setVelocity(vec);
+    setVelocity({ loc.x() - newloc.x(), loc.y() - newloc.y() });
 
     cohesionForces.clear();
     separationForces.clear();

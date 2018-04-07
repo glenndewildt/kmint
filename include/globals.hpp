@@ -13,7 +13,7 @@ static bool attractedToFransActive { false };
 static bool attractedToJohnnieActive { false };
 
 static double cohesionDistance { 100 };
-static double alignmentDistance { 50 };
+static double alignmentDistance { 75 };
 static double separationDistance { 50 };
 
 static bool cohesionActive { true };
