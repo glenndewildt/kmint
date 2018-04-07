@@ -9,11 +9,34 @@
 
 using namespace kmint;
 
-Fan::Fan(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i}, ata { 1 }, atf { 1 }, atj { 1 }, atx { 1 }, cohesion{1}, separation{1}, alignment{1}{
+Fan::Fan(point location, const image &i) : free_roaming_board_piece { location }, _drawable { *this,i}{
+    std::default_random_engine gen(rand() % 10000);
 
+    std::uniform_int_distribution<int> attra(-1000, 1000);
+    std::uniform_int_distribution<int> attrf(-1000, 1000);
+    std::uniform_int_distribution<int> attrj(-1000, 1000);
+    std::uniform_int_distribution<int> attrx(-1000, 1000);
+
+    std::uniform_int_distribution<int> cohes(0, 1000);
+    std::uniform_int_distribution<int> separ(0, 1000);
+    std::uniform_int_distribution<int> align(0, 1000);
+
+    ata = ((double) attra(gen) / 1000);
+    atf = ((double) attrf(gen) / 1000);
+    atj = ((double) attrj(gen) / 1000);
+    atx = ((double) attrx(gen) / 1000);
+
+    cohesion         = ((double) cohes(gen) / 1000);
+    separation       = ((double) separ(gen) / 1000);
+    alignment        = ((double) align(gen) / 1000);
 }
 
 void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
+    if (!isAlive)
+        return;
+
+    fitness++;
+
     scanForNearbyFans(_board_pieces);
 
     Linal::G2D::Vector cohesionVec { Linal::G2D::Vector{ 0 , 0 }};

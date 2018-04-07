@@ -15,11 +15,16 @@ namespace kmint
 
     private:
         std::vector<kmint::Fan*> currentFans;
-        double ats = 0; // storaged average of attractionToSheep where fitness is equal or higher to fitness average
-        double atw = 0; // storaged average of attractionToWater where fitness is equal or higher to fitness average
+        double ata = 0; // storaged average of attraction to bandlid where fitness is equal or higher to fitness average
+        double atf = 0; // storaged average of attraction to bandlid where fitness is equal or higher to fitness average
+        double atj = 0; // storaged average of attraction to bandlid where fitness is equal or higher to fitness average
+        double atx = 0; // storaged average of attraction to bandlid where fitness is equal or higher to fitness average
+
         double coh = 0; // storaged average of cohesion where fitness is equal or higher to fitness average
         double sep = 0; // storaged average of separation where fitness is equal or higher to fitness average
         double ali = 0; // storaged average of alignment where fitness is equal or higher to fitness average
+
+
 
         int maxFitness = 0;
         int minFitness = 0;
@@ -32,10 +37,34 @@ namespace kmint
 
         std::vector<kmint::Fan*> GetSpawnPool()
         {
+            decideChromesomeValue();
+            selectOffspring();
+
             return GeneratePopulation();
         }
 
     private:
+        void decideChromesomeValue() {
+            for (auto fan : currentFans) {
+                ata += fan->getAttractionToAndre() * fan->GetFitness();
+                atf += fan->getAttractionToFrans() * fan->GetFitness();
+                atj += fan->getAttractionToJohnnie() * fan->GetFitness();
+                atx += fan->getAttractionToAxel() * fan->GetFitness();
+
+                coh += fan->getCohesion() * fan->GetFitness();
+                sep += fan->getSeparation() * fan->GetFitness();
+                ali += fan->getAlignment() * fan->GetFitness();
+            }
+
+            bool breakpoint = true;
+        };
+
+        void selectParent() {
+
+        };
+
+        void selectOffspring() {}; // Which parent does deliver the chromesome of type X
+
         std::vector<kmint::Fan*> GeneratePopulation()
         {
             std::vector<kmint::Fan*> nextGen;
@@ -46,7 +75,7 @@ namespace kmint
                 auto offSpring2 = GetRandomOffSpring();
 
                 std::default_random_engine gen(rand() % 10000);
-                std::uniform_int_distribution<int> pickAts(0, 1), pickAtw(0, 1), pickCoh(0, 1), pickSep(0, 1), pickAli(0, 1);
+                std::uniform_int_distribution<int> pickAta(-1, 1), pickAtf(-1, 1), pickAtj(-1, 1), pickAtx(-1, 1), pickCoh(0, 1), pickSep(0, 1), pickAli(0, 1);
 
                 std::uniform_int_distribution<int> xCord(10, 12700);
                 std::uniform_int_distribution<int> yCord(10, 690);
@@ -54,6 +83,13 @@ namespace kmint
                 nextGen.push_back(new kmint::Fan{
                         kmint::point { xCord(gen), yCord(gen) },
                         kmint::image {"resources/xsfan.png", 1.0f},
+                        -0.75,
+                        0.85,
+                        -0.35,
+                        0.6,
+                        0,
+                        0.35,
+                        0.25,
                         //pickCoh(gen) ? offSpring1->GetCohesion() : offSpring2->GetCohesion(),
                         //pickSep(gen) ? offSpring1->GetSeparation() : offSpring2->GetSeparation(),
                         //pickAli(gen) ? offSpring1->GetAlignment() : offSpring2->GetAlignment()
@@ -99,8 +135,11 @@ namespace kmint
         {
             double avgFitness = 0;
 
-            ats = 0;
-            atw = 0;
+            ata = 0;
+            atf = 0;
+            atj = 0;
+            atx = 0;
+
             coh = 0;
             sep = 0;
             ali = 0;
@@ -127,8 +166,8 @@ namespace kmint
                 }
             }
 
-            ats = ats / selectedFitables;
-            atw = atw / selectedFitables;
+            ata = ata / selectedFitables;
+            atf = atf / selectedFitables;
             coh = coh / selectedFitables;
             sep = sep / selectedFitables;
             ali = ali / selectedFitables;
