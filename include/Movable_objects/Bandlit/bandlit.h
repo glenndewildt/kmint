@@ -18,6 +18,7 @@ namespace kmint {
         double pause;
         double time;
         double wait;
+        int des_node_id;
 
 
         bandlit(const graph &graph, node_id nid, const image &i, city* city):stad{city},pause{0},time{0}, wait{0},money{1000},state_object(graph,nid,i){
