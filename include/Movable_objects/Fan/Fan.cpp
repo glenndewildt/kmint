@@ -67,7 +67,7 @@ void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
 ******************************/
 void Fan::scanForNearbyFans(std::vector< board_piece*> &_board_pieces)
 {
-    auto loc = location();
+    auto fromLoc = location();
 
     for (auto bp : _board_pieces)
     {
@@ -78,14 +78,14 @@ void Fan::scanForNearbyFans(std::vector< board_piece*> &_board_pieces)
             if (!fo->isAlive) continue; // Leave the dead alone
 
             auto foLoc = fo->location();
-            auto dist = getCoordDifference(foLoc, loc);
+            auto dist = getCoordDifference(foLoc, fromLoc);
 
             if (cohesionActive && dist <= cohesionDistance) {
-                cohesionForces.push_back({loc.x() - foLoc.x(), loc.y() - foLoc.y()});
+                cohesionForces.push_back({fromLoc.x() - foLoc.x(), fromLoc.y() - foLoc.y()});
             }
 
             if (separationActive && dist <= separationDistance) {
-                separationForces.push_back({separationDistance - (loc.x() - foLoc.x()), separationDistance - ( loc.y() - foLoc.y())});
+                separationForces.push_back({separationDistance - (fromLoc.x() - foLoc.x()), separationDistance - ( fromLoc.y() - foLoc.y())});
             }
 
             if (alignmentActive && dist <= alignmentDistance) {
@@ -95,30 +95,30 @@ void Fan::scanForNearbyFans(std::vector< board_piece*> &_board_pieces)
 
         if (auto fo = dynamic_cast<kmint::bandlit*>(bp))
         {
-            auto foLoc = fo->location();
-            auto dist = getCoordDifference(foLoc, loc);
+            auto tarLoc = fo->location();
+            auto dist = getCoordDifference(tarLoc, fromLoc);
 
             if (dist <= bandmemberDistance)
             {
                 switch (fo->name) {
                     case kmint::bandlit::ANDRE:
                         if (attractedToAndreActive)
-                            toAndre = {loc.x() - foLoc.x(), loc.y() - foLoc.y()};
+                            toAndre = {tarLoc.x() - fromLoc.x(), tarLoc.y() - fromLoc.y()};
                         break;
                     case kmint::bandlit::AXEL:
                         if (attractedToAxelActive)
-                            toAxel = {loc.x() - foLoc.x(), loc.y() - foLoc.y()};
+                            toAxel = {tarLoc.x() - fromLoc.x(), tarLoc.y() - fromLoc.y()};
                         break;
                     case kmint::bandlit::FRANS:
                         if (attractedToFransActive)
-                            toFrans = {loc.x() - foLoc.x(), loc.y() - foLoc.y()};
+                            toFrans = {tarLoc.x() - fromLoc.x(), tarLoc.y() - fromLoc.y()};
                         break;
                     case kmint::bandlit::JOHNNIE:
                         if (dist <= johnniedeadzone && heresjohnniemode)
                             isAlive = false;
                         else
                             if (attractedToJohnnieActive)
-                                toJohnnie = {loc.x() - foLoc.x(), loc.y() - foLoc.y()};
+                                toJohnnie = {tarLoc.x() - fromLoc.x(), tarLoc.y() - fromLoc.y()};
 
                         break;
                 }
