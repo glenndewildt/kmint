@@ -25,11 +25,11 @@ static bool alignmentActive { true };
 static bool separationActive { true };
 
 static double getCoordDifference(double x1, double y1, double x2, double y2) {
-    return std::abs((x2 - x1) + (y2 - y1));
+    return std::abs(x1 - x2) + std::abs(y1 - y2);
 }
 
 static double getCoordDifference(kmint::point left, kmint::point right) {
-    return std::abs((left.x() - right.x()) + (left.y() - right.y()));
+    return std::abs(left.x() - right.x()) + std::abs(left.y() - right.y());
 }
 
 #endif //KMINTFRAMEWORK_GLOBALS_HPP
