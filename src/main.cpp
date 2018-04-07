@@ -25,6 +25,7 @@
 #include <Movable_objects/Manager/Manager.h>
 #include <Movable_objects/State/go_to_bandlit.h>
 #include <Movable_objects/State/wait.h>
+#include <Movable_objects/State/work.h>
 
 #include "../a_star/a_star.h"
 
@@ -61,13 +62,17 @@ int main() {
         t1.add_state(new kmint::wandering_state(&t1),"wandering");
         t2.add_state(new kmint::wandering_state(&t2),"wandering");
         t3.add_state(new kmint::wandering_state(&t3),"wandering");
-        man.add_state(new kmint::wandering_state(&t3),"wandering");
+        man.add_state(new kmint::wandering_state(&man),"wandering");
 
         t1.add_state(new kmint::wait(&t1),"wait");
         t2.add_state(new kmint::wait(&t2),"wait");
         t3.add_state(new kmint::wait(&t3),"wait");
 
-        man.add_state(new kmint::go_to_bandlit(&t1),"go_to_bandlit");
+        t1.add_state(new kmint::work(&t1),"work");
+        t2.add_state(new kmint::work(&t2),"work");
+        t3.add_state(new kmint::work(&t3),"work");
+
+        man.add_state(new kmint::go_to_bandlit(&man),"go_to_bandlit");
 
 
         t1.add_state(new kmint::sleep_state(&t1),"sleep");
@@ -87,12 +92,12 @@ int main() {
         s.add_board_piece(b);
         s.add_board_piece(g);
         s.add_board_piece(c);
-        s.add_board_piece(man);
         s.add_board_piece(g);
 
         s.add_board_piece(t1);
         s.add_board_piece(t2);
         s.add_board_piece(t3);
+        s.add_board_piece(man);
 
 
         std::default_random_engine gen(rand() % 1000);

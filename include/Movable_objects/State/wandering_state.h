@@ -26,10 +26,14 @@ namespace kmint {
         wandering_state(state_object* object): object{object}, next_node_id{-1}{};
         void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
             //check condition if near by bunny
-            if (dynamic_cast<kmint::bandlit *>(object)) {
+            if (dynamic_cast<kmint::Manager *>(object)) {
+                return;
+            }
+
+                if (dynamic_cast<kmint::bandlit *>(object)) {
 
                 kmint::bandlit* band =dynamic_cast<kmint::bandlit *>(object);
-                if( band->money <= 900){
+                if( band->money <= 100){
                     std::cout<< "Geen money om te lopen";
                     for (auto bp : _board_pieces) {
                         if (dynamic_cast<Manager *>(bp)) {
@@ -37,7 +41,8 @@ namespace kmint {
                             kmint::Manager* man =dynamic_cast<kmint::Manager *>(bp);
                             if(!man->is_busy){
                                 // call manager
-                                man->call_manager(1);
+                                //TODO:: give bandit id
+                                man->call_manager(520);
                                 // set state to wait for manager
                                 object->set_state("wait");
                                 std::cout<< "wait for manager ";
@@ -66,10 +71,9 @@ namespace kmint {
         };
 
         void update() {
-            std::cout << "wandering state id = "<< object->get_node_id() << std::endl;
             std::unordered_map< int,int> node_ids;
             if(next_node_id != -1){
-                if(weight >0){
+                if(weight >=0){
                     std::cout<<"Weight : "<< weight;
                     weight--;
 
