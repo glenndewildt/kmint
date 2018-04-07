@@ -39,6 +39,11 @@ namespace kmint{
     void update() {
         std::cout<< "Work";
 
+        int bejaardenhuis= 120;
+        int bibliotheek = 624;
+        int cafe = 1377;
+        int poppoduim = 573;
+
     };
 
     void draw() {};

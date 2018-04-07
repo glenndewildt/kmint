@@ -48,10 +48,11 @@ int main() {
 
 //        kmint::Mrs_Jansen meneer { g, 5, kmint::image { "resources/meneerjanssen.png", 0.33f } };
 //        kmint::Miss_Jansen mevrouw { g, 1570, kmint::image { "resources/mevrouwjanssen.png", 0.33f } };
-        kmint::bandlit t1{ g,66,kmint::image { "resources/poochyena.png", 0.25f },&c};
-        kmint::bandlit t2{ g,1180,kmint::image { "resources/poochyena.png", 0.25f },&c};
-        kmint::bandlit t3{ g,520,kmint::image { "resources/poochyena.png", 0.25f },&c};
-        kmint::Manager man {g,520,kmint::image { "resources/meneerjanssen.png", 0.25f },&c};
+        kmint::bandlit t1{ g,120,kmint::image { "resources/poochyena.png", 0.25f },&c};
+        kmint::bandlit t2{ g,624,kmint::image { "resources/poochyena.png", 0.25f },&c};
+        kmint::bandlit t3{ g,1377,kmint::image { "resources/poochyena.png", 0.25f },&c};
+        kmint::Manager man {g,573,kmint::image { "resources/meneerjanssen.png", 0.25f },&c};
+
 
         kmint::a_star search;
         kmint::node start = g[1];
