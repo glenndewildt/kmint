@@ -14,6 +14,7 @@ class go_to_bandlit:  public base_state {
 private:
 int counter;
 state_object* object;
+    std::vector<node> path;
 public:
 void OnExit(){
     std::cout<< "Exit  go_to_bandlit state"<<std::endl;
@@ -29,15 +30,38 @@ void OnEnter(){
 
 void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
 
+    if (dynamic_cast<kmint::Manager *>(object)) {
+
+        kmint::Manager* man =dynamic_cast<kmint::Manager *>(object);
+
+                if(man->get_node_id() == man->dest_node_id){
+                    std::cout<< "manager is with bandlit"<< std::endl;
+                    man->is_busy = false;
+                    man->set_state("wandering");
+                }
+
+
+
+        }
 
 
 };
 
 void update() {
-    std::cout << "go_to_bandlit state" << std::endl;
-};
+    // astar search algoritme
+    if (dynamic_cast<kmint::Manager *>(object)) {
 
-void draw() {};
+        kmint::Manager* man =dynamic_cast<kmint::Manager *>(object);
+
+        man->set_node_id(man->dest_node_id);
+
+
+
+    }};
+
+void draw() {
+
+};
 
 };
 }

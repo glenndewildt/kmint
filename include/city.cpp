@@ -28,15 +28,22 @@ namespace kmint {
                         _nodes.emplace_back(p,num_nodes(),color { 0x80,0x00,0x00 },8);
 
                     }if(c == 'L'){
+                        auto t = num_nodes();
                         _nodes.emplace_back(p,num_nodes(),color { 0xFF,0x00,0x00 },0);
 
                     }if(c == 'N'){
+                        auto t = num_nodes();
+
                         _nodes.emplace_back(p,num_nodes(),color { 0x00,0xFF,0x00 },0);
 
                     }if(c == 'P'){
+                        auto t = num_nodes();
+
                         _nodes.emplace_back(p,num_nodes(),color {0x00,0x00,0xFF },0);
 
                     }if(c == 'C'){
+                        auto t = num_nodes();
+
                         _nodes.emplace_back(p,num_nodes(),color { 0xC0,0x00,0xFF },0);
 
                     }

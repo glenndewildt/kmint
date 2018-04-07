@@ -30,30 +30,20 @@ namespace kmint{
 
         void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
 
-            if (dynamic_cast<kmint::bandlit *>(object)) {
-
-                kmint::bandlit* band =dynamic_cast<kmint::bandlit *>(object);
-                for (auto bp : _board_pieces) {
-                    if (dynamic_cast<Manager *>(bp)) {
-
-                        kmint::Manager* man =dynamic_cast<kmint::Manager *>(bp);
-                        if(man->get_node_id() == object->get_node_id()){
-                            std::cout<< "manager is near appointment";
-
-                        }
-
-                    }
-
-                }
-            }
 
         }
 
 
-    };
+
 
     void update() {
-        std::cout << "wait state" << std::endl;
+        std::cout<< "Work";
+
+        int bejaardenhuis= 120;
+        int bibliotheek = 624;
+        int cafe = 1377;
+        int poppoduim = 573;
+
     };
 
     void draw() {};
