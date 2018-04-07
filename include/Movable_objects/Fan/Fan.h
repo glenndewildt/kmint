@@ -44,6 +44,7 @@ namespace kmint {
         Fan& setSeparation(double);
         Fan& setAlignment(double);
 
+        bool isAlive { true };
     private:
         void scanForNearbyFans(std::vector< board_piece*> &_board_pieces);
 
@@ -51,9 +52,14 @@ namespace kmint {
         std::vector<Linal::G2D::Vector> separationForces;
         std::vector<Linal::G2D::Vector> alignmentForces;
 
+        Linal::G2D::Vector toAxel = {0, 0};
+        Linal::G2D::Vector toAndre = {0, 0};
+        Linal::G2D::Vector toFrans = {0, 0};
+        Linal::G2D::Vector toJohnnie = {0, 0};
+
         Fan& setVelocity(Linal::G2D::Vector);
 
-        Linal::G2D::Vector velocity { 10, -10 };
+        Linal::G2D::Vector velocity { 0, 0 };
 
         double ata;
         double atf;
@@ -65,7 +71,6 @@ namespace kmint {
         double alignment;
 
         int fitness { 0 };
-        bool isAlive { true };
     };
 
     class Old : public free_roaming_board_piece {

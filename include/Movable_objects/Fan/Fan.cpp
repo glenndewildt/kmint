@@ -3,6 +3,7 @@
 //
 
 #include <image.h>
+#include <Movable_objects/Bandlit/bandlit.h>
 #include "Fan.h"
 #include "globals.hpp"
 
@@ -21,25 +22,25 @@ void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
     Linal::G2D::Vector separationVec { Linal::G2D::Vector{ 0 , 0 }};
 
     for (auto coh : cohesionForces) {
-        cohesionVec.x((cohesionVec.x() - coh.x()) * cohesion);
-        cohesionVec.y((cohesionVec.y() - coh.y()) * cohesion);
+        cohesionVec.x(cohesionVec.x() - coh.x());
+        cohesionVec.y(cohesionVec.y() - coh.y());
     }
 
     for (auto sep : separationForces) {
-        separationVec.x((separationVec.x() - sep.x()) * separation);
-        separationVec.y((separationVec.y() - sep.y()) * separation);
+        separationVec.x(separationVec.x() - sep.x());
+        separationVec.y(separationVec.y() - sep.y());
     }
 
     for (auto ali : alignmentForces) {
-        alignmentVec.x((alignmentVec.x() - ali.x()) * alignment);
-        alignmentVec.y((alignmentVec.y() - ali.y()) * alignment);
+        alignmentVec.x(alignmentVec.x() - ali.x());
+        alignmentVec.y(alignmentVec.y() - ali.y());
     }
 
-    cohesionVec = cohesionVec.GetUnitVector();
-    alignmentVec = alignmentVec.GetUnitVector();
-    separationVec = separationVec.GetUnitVector();
+    cohesionVec = cohesionVec.GetUnitVector() * cohesion;
+    alignmentVec = alignmentVec.GetUnitVector() * alignment;
+    separationVec = separationVec.GetUnitVector() * separation;
 
-    vec = (alignmentVec + cohesionVec + separationVec).GetUnitVector();
+    vec = (cohesionVec + alignmentVec + separationVec + toAxel.GetUnitVector() + toAndre.GetUnitVector() + toFrans.GetUnitVector() + toJohnnie.GetUnitVector()).GetUnitVector();
     auto loc = location();
 
     auto newloc = kmint::point{ round(vec.x()) + loc.x(), round(vec.y()) + loc.y() };
@@ -54,6 +55,11 @@ void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
     cohesionForces.clear();
     separationForces.clear();
     alignmentForces.clear();
+
+    toAxel = {0, 0};
+    toAndre = {0, 0};
+    toFrans = {0, 0};
+    toJohnnie = {0, 0};
 }
 
 /******************************
@@ -61,7 +67,7 @@ void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
 ******************************/
 void Fan::scanForNearbyFans(std::vector< board_piece*> &_board_pieces)
 {
-    auto loc = location();
+    auto fromLoc = location();
 
     for (auto bp : _board_pieces)
     {
@@ -72,135 +78,54 @@ void Fan::scanForNearbyFans(std::vector< board_piece*> &_board_pieces)
             if (!fo->isAlive) continue; // Leave the dead alone
 
             auto foLoc = fo->location();
-            auto dist = getCoordDifference(foLoc, loc);
+            auto dist = getCoordDifference(foLoc, fromLoc);
 
             if (cohesionActive && dist <= cohesionDistance) {
-                cohesionForces.push_back({loc.x() - foLoc.x(), loc.y() - foLoc.y()});
+                cohesionForces.push_back({fromLoc.x() - foLoc.x(), fromLoc.y() - foLoc.y()});
             }
 
             if (separationActive && dist <= separationDistance) {
-                separationForces.push_back({dist - (loc.x() - foLoc.x()), dist - ( loc.y() - foLoc.y())});
+                separationForces.push_back({separationDistance - (fromLoc.x() - foLoc.x()), separationDistance - ( fromLoc.y() - foLoc.y())});
             }
 
             if (alignmentActive && dist <= alignmentDistance) {
                 alignmentForces.push_back(fo->getVelocity());
             }
         }
-    }
-}
 
-/***********************
-* CALCULATION OF STUFF *
-***********************
-Linal::G2D::Vector GetCohesionVec(std::vector< board_piece*> _board_pieces) {
-    auto loc = location();
-    auto vec = Linal::G2D::Vector(loc.x(), loc.y());
-
-    int sumCount = 0;
-    Linal::G2D::Vector vecSum;
-    for (auto bp : _board_pieces)
-    {
-        if (auto foreignObject = dynamic_cast<kmint::Fan*>(bp))
+        if (auto fo = dynamic_cast<kmint::bandlit*>(bp))
         {
-            //if (foreignObject->hasDied()) continue;
+            auto tarLoc = fo->location();
+            auto dist = getCoordDifference(tarLoc, fromLoc);
 
-            auto targetLoc = bp->location();
-            if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
-                continue;
-
-            auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
-
-            auto diff = (targetLoc - loc);
-            if (std::abs(diff.x()) + std::abs(diff.y()) > cohesionDistance)
-                continue;
-
-            vecSum = vecSum + targetVec;
-            sumCount++;
-        }
-    }
-
-    if (sumCount > 0) {
-        vecSum = vecSum / sumCount;
-        vecSum.x(vecSum.x() - loc.x());
-        vecSum.y(vecSum.y() - loc.y());
-        return vecSum;
-    }
-
-    return Linal::G2D::Vector(0, 0);
-}
-
-Linal::G2D::Vector GetSeparationVec(std::vector< board_piece*> _board_pieces) {
-    auto loc = location();
-    auto vec = Linal::G2D::Vector(loc.x(), loc.y());
-
-    auto targetVecSum = Linal::G2D::Vector(0, 0);
-    int count = 0;
-    for (auto bp : _board_pieces)
-    {
-        if (auto foreignObject = dynamic_cast<kmint::Fan*>(bp))
-        {
-            //if (foreignObject->hasDied()) continue;
-
-            auto targetLoc = bp->location();
-            if (loc.x() == targetLoc.x() && loc.y() == targetLoc.y())
-                continue;
-
-            auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
-
-            auto diffVec = targetVec - vec;
-
-            if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < separationDistance)
+            if (dist <= bandmemberDistance)
             {
-                targetVecSum = targetVecSum + targetVec;
-                count++;
+                switch (fo->name) {
+                    case kmint::bandlit::ANDRE:
+                        if (attractedToAndreActive)
+                            toAndre = {tarLoc.x() - fromLoc.x(), tarLoc.y() - fromLoc.y()};
+                        break;
+                    case kmint::bandlit::AXEL:
+                        if (attractedToAxelActive)
+                            toAxel = {tarLoc.x() - fromLoc.x(), tarLoc.y() - fromLoc.y()};
+                        break;
+                    case kmint::bandlit::FRANS:
+                        if (attractedToFransActive)
+                            toFrans = {tarLoc.x() - fromLoc.x(), tarLoc.y() - fromLoc.y()};
+                        break;
+                    case kmint::bandlit::JOHNNIE:
+                        if (dist <= johnniedeadzone && heresjohnniemode)
+                            isAlive = false;
+                        else
+                            if (attractedToJohnnieActive)
+                                toJohnnie = {tarLoc.x() - fromLoc.x(), tarLoc.y() - fromLoc.y()};
+
+                        break;
+                }
             }
 
         }
     }
-
-    if (count > 0)
-    {
-        auto diffVec = (targetVecSum / count) - vec;
-        return (vec - (targetVecSum / count)).GetUnitVector() * (separationDistance + (std::abs(diffVec.x() + std::abs(diffVec.y()))));
-    }
-
-
-    return Linal::G2D::Vector(0, 0);
-}
-
-Linal::G2D::Vector GetAlignmentVec(std::vector< board_piece*> _board_pieces) {
-    auto loc = location();
-    auto vec = Linal::G2D::Vector(loc.x(), loc.y());
-
-    int sumCount = 0;
-    Linal::G2D::Vector vecSum;
-    for (auto bp : _board_pieces)
-    {
-        if (auto foreignObject = dynamic_cast<kmint::Fan*>(bp))
-        {
-            //if (bunny->hasDied()) continue;
-
-            auto targetLoc = foreignObject->location();
-            if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
-                continue;
-
-            auto diff = (targetLoc - loc);
-            if (std::abs(diff.x()) + std::abs(diff.y()) > alignmentDistance)
-                continue;
-
-            //vecSum = vecSum + foreignObject->GetVelocity();
-            sumCount++;
-        }
-    }
-
-    if (sumCount > 0) {
-        vecSum = (vecSum / sumCount).GetUnitVector();
-        vecSum = vecSum + vec;
-
-        return vecSum;
-    }
-
-    return Linal::G2D::Vector(0, 0);
 }
 
 /**********************
