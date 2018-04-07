@@ -25,6 +25,7 @@ static bool cohesionActive { false };
 static bool alignmentActive { false };
 static bool separationActive { false };
 
+
 static double getCoordDifference(double x1, double y1, double x2, double y2) {
     return std::abs(x1 - x2) + std::abs(y1 - y2);
 }
