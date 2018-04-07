@@ -24,6 +24,7 @@
 #include <set>
 #include <Movable_objects/Manager/Manager.h>
 #include <Movable_objects/State/go_to_bandlit.h>
+#include <Movable_objects/State/wait.h>
 
 #include "../a_star/a_star.h"
 
@@ -61,6 +62,10 @@ int main() {
         t2.add_state(new kmint::wandering_state(&t2),"wandering");
         t3.add_state(new kmint::wandering_state(&t3),"wandering");
         man.add_state(new kmint::wandering_state(&t3),"wandering");
+
+        t1.add_state(new kmint::wait(&t1),"wait");
+        t2.add_state(new kmint::wait(&t2),"wait");
+        t3.add_state(new kmint::wait(&t3),"wait");
 
         man.add_state(new kmint::go_to_bandlit(&t1),"go_to_bandlit");
 

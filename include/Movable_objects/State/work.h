@@ -2,29 +2,30 @@
 // Created by administrator on 7-4-18.
 //
 
+#ifndef KMINTFRAMEWORK_WORK_H
+#define KMINTFRAMEWORK_WORK_H
+
 #include <Movable_objects/Bandlit/bandlit.h>
 #include <Movable_objects/Manager/Manager.h>
 #include "base_state.h"
 #include "state_object.h"
 
-#ifndef KMINTFRAMEWORK_WAIT_H
-#define KMINTFRAMEWORK_WAIT_H
 namespace kmint{
-    class wait:   public base_state {
+    class work:   public base_state {
     private:
         int counter;
         state_object* object;
     public:
         void OnExit(){
-            std::cout<< "Exit  wait state"<<std::endl;
+            std::cout<< "Exit  work state"<<std::endl;
 
 
         };
         void OnEnter(){
-            std::cout<< "Enter  wait state"<<std::endl;
+            std::cout<< "Enter  work state"<<std::endl;
 
         };
-        wait(state_object* object):counter{0}, object{object}{};
+        work(state_object* object):counter{0}, object{object}{};
 
 
         void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
@@ -58,6 +59,5 @@ namespace kmint{
     void draw() {};
 
 };
-
-
-#endif //KMINTFRAMEWORK_WAIT_H
+}
+#endif //KMINTFRAMEWORK_WORK_H

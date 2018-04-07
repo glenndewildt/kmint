@@ -36,7 +36,7 @@ namespace kmint {
 
                             kmint::Manager* man =dynamic_cast<kmint::Manager *>(bp);
                             man->call_manager(1);
-                            setstate("wait");
+                            object->set_state("wait");
 
                         }
 
