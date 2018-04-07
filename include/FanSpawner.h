@@ -6,6 +6,7 @@
 #define KMINTFRAMEWORK_BUNNYSPAWNER_H
 
 #include "Movable_objects/Fan/Fan.h"
+#include "globals.hpp"
 
 namespace kmint
 {
@@ -13,7 +14,7 @@ namespace kmint
     {
 
     private:
-        std::vector<kmint::Old*> currentBunnies;
+        std::vector<kmint::Fan*> currentFans;
         double ats = 0; // storaged average of attractionToSheep where fitness is equal or higher to fitness average
         double atw = 0; // storaged average of attractionToWater where fitness is equal or higher to fitness average
         double coh = 0; // storaged average of cohesion where fitness is equal or higher to fitness average
@@ -25,22 +26,22 @@ namespace kmint
     public:
         FanSpawner(std::vector<kmint::board_piece*> _boardPieces) {
             for (auto bp : _boardPieces)
-                if (dynamic_cast<kmint::Old*>(bp))
-                    currentBunnies.push_back(dynamic_cast<kmint::Old*>(bp));
+                if (dynamic_cast<kmint::Fan*>(bp))
+                    currentFans.push_back(dynamic_cast<kmint::Fan*>(bp));
         }
 
-        std::vector<kmint::Old*> GetSpawnPool()
+        std::vector<kmint::Fan*> GetSpawnPool()
         {
             return GeneratePopulation();
         }
 
     private:
-        std::vector<kmint::Old*> GeneratePopulation()
+        std::vector<kmint::Fan*> GeneratePopulation()
         {
-            std::vector<kmint::Old*> nextGen;
+            std::vector<kmint::Fan*> nextGen;
             nextGen.clear();
 
-            while (nextGen.size() < 20) {
+            while (nextGen.size() < fansToSpawn) {
                 auto offSpring1 = GetRandomOffSpring();
                 auto offSpring2 = GetRandomOffSpring();
 
@@ -50,14 +51,12 @@ namespace kmint
                 std::uniform_int_distribution<int> xCord(10, 12700);
                 std::uniform_int_distribution<int> yCord(10, 690);
 
-                nextGen.push_back(new kmint::Old{
+                nextGen.push_back(new kmint::Fan{
                         kmint::point { xCord(gen), yCord(gen) },
-                        kmint::image {"resources/fan.png", 0.33f},
-                        pickAts(gen) ? offSpring1->GetAttractionToSheep() : offSpring2->GetAttractionToSheep(),
-                        pickAtw(gen) ? offSpring1->GetAttractionToWater() : offSpring2->GetAttractionToWater(),
-                        pickCoh(gen) ? offSpring1->GetCohesion() : offSpring2->GetCohesion(),
-                        pickSep(gen) ? offSpring1->GetSeparation() : offSpring2->GetSeparation(),
-                        pickAli(gen) ? offSpring1->GetAlignment() : offSpring2->GetAlignment()
+                        kmint::image {"resources/xsfan.png", 1.0f},
+                        //pickCoh(gen) ? offSpring1->GetCohesion() : offSpring2->GetCohesion(),
+                        //pickSep(gen) ? offSpring1->GetSeparation() : offSpring2->GetSeparation(),
+                        //pickAli(gen) ? offSpring1->GetAlignment() : offSpring2->GetAlignment()
                 });
             }
 
@@ -67,7 +66,7 @@ namespace kmint
         /**
          * @Todo if this doesnt work remove the erase
          */
-        kmint::Old* GetRandomOffSpring()
+        kmint::Fan* GetRandomOffSpring()
         {
 
             for (int i = 0; i < 1; i++)
@@ -75,9 +74,9 @@ namespace kmint
                 std::default_random_engine gen(rand() % 10000);
                 std::uniform_int_distribution<int> fitEnough(minFitness, maxFitness);
 
-                auto it = currentBunnies.begin();
+                auto it = currentFans.begin();
                 int count = 0;
-                for (auto b : currentBunnies) {
+                for (auto b : currentFans) {
                     if (b->GetFitness() > fitEnough(gen)) {
                         return b;
                         //auto copyBunny(b);
@@ -106,10 +105,10 @@ namespace kmint
             sep = 0;
             ali = 0;
 
-            double countAnalyzable = currentBunnies.size();
+            double countAnalyzable = currentFans.size();
             double selectedFitables = 0;
 
-            for (auto b : currentBunnies) {
+            for (auto b : currentFans) {
                 if (b->GetFitness() < minFitness) minFitness = b->GetFitness();
                 avgFitness += b->GetFitness();
                 if (b->GetFitness() > maxFitness) maxFitness = b->GetFitness();
@@ -117,14 +116,12 @@ namespace kmint
 
             avgFitness = avgFitness / countAnalyzable;
 
-            for (auto b : currentBunnies)
+            for (auto b : currentFans)
             {
                 if (b->GetFitness() >= avgFitness) {
-                    ats += b->GetAttractionToSheep();
-                    atw += b->GetAttractionToWater();
-                    coh += b->GetCohesion();
-                    sep += b->GetSeparation();
-                    ali += b->GetAlignment();
+                    //coh += b->GetCohesion();
+                    //sep += b->GetSeparation();
+                    //ali += b->GetAlignment();
 
                     selectedFitables++;
                 }

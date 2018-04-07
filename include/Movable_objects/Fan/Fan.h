@@ -45,6 +45,7 @@ namespace kmint {
         Fan& setAlignment(double);
 
         bool isAlive { true };
+        const int GetFitness() const { return fitness; }
     private:
         void scanForNearbyFans(std::vector< board_piece*> &_board_pieces);
 
@@ -104,30 +105,6 @@ namespace kmint {
 
         bool hasDied() { return isDead; }
 
-        void update(float dt, std::vector< board_piece*> &_board_pieces)
-        {
-            fitness++;
-            auto loc = location();
-
-           // auto sheep = GetAttractionToSheepVec(_board_pieces).GetUnitVector() * attractedToSheep;
-            //auto water = GetAttractionToWater(_board_pieces) * attractedToWater;
-            auto cohes = GetCohesionVec(_board_pieces).GetUnitVector() * cohesion;
-            auto separ = GetSeparationVec(_board_pieces) * separation;
-            auto align = GetAlignmentVec(_board_pieces).GetUnitVector() * alignment;
-
-            auto vec = (velocity + align + separ + cohes).GetUnitVector();
-
-            auto newloc = kmint::point{ round(vec.x()) + loc.x(), round(vec.y()) + loc.y() };
-
-            // No matter what, they can't get out of view
-            if (newloc.x() < 10) newloc.x(10); else if (newloc.x() > 1270) newloc.x(1270);
-            if (newloc.y() < 10) newloc.y(10); else if (newloc.y() > 710) newloc.y(710);
-
-            set_point(newloc );
-
-            velocity = vec;
-        }
-
         double GetAttractionToSheep(){ return attractedToSheep; }
         double GetAttractionToWater(){ return attractedToWater; }
         double GetCohesion() { return cohesion; }
@@ -145,117 +122,6 @@ namespace kmint {
         int fitness = 0;
         bool isDead = false;
 
-    //public:
-        Linal::G2D::Vector GetCohesionVec(std::vector< board_piece*> _board_pieces) {
-            auto loc = location();
-            auto vec = Linal::G2D::Vector(loc.x(), loc.y());
-
-            int sumCount = 0;
-            Linal::G2D::Vector vecSum;
-            for (auto bp : _board_pieces)
-            {
-                if (auto bunny = dynamic_cast<kmint::Old*>(bp))
-                {
-                    if (bunny->hasDied()) continue;
-
-                    auto targetLoc = bp->location();
-                    if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
-                        continue;
-
-                    auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
-
-                    auto diff = (targetLoc - loc);
-                    if (std::abs(diff.x()) + std::abs(diff.y()) > 400)
-                        continue;
-
-                    vecSum = vecSum + targetVec;
-                    sumCount++;
-                }
-            }
-
-            if (sumCount > 0) {
-                vecSum = vecSum / sumCount;
-                vecSum.x(vecSum.x() - loc.x());
-                vecSum.y(vecSum.y() - loc.y());
-                return vecSum;
-            }
-
-            return Linal::G2D::Vector(0, 0);
-        }
-
-        Linal::G2D::Vector GetSeparationVec(std::vector< board_piece*> _board_pieces) {
-            auto loc = location();
-            auto vec = Linal::G2D::Vector(loc.x(), loc.y());
-
-            auto targetVecSum = Linal::G2D::Vector(0, 0);
-            int count = 0;
-            for (auto bp : _board_pieces)
-            {
-                if (auto bunny = dynamic_cast<kmint::Old*>(bp))
-                {
-                    if (bunny->hasDied()) continue;
-
-                    auto targetLoc = bp->location();
-                    if (loc.x() == targetLoc.x() && loc.y() == targetLoc.y())
-                        continue;
-
-                    auto targetVec = Linal::G2D::Vector(targetLoc.x(), targetLoc.y()) ;
-
-                    auto diffVec = targetVec - vec;
-
-                    if (std::abs(diffVec.x()) + std::abs(diffVec.y()) < 65)
-                    {
-                        targetVecSum = targetVecSum + targetVec;
-                        count++;
-                    }
-
-                }
-            }
-
-            if (count > 0)
-            {
-                auto diffVec = (targetVecSum / count) - vec;
-                return (vec - (targetVecSum / count)).GetUnitVector() * (65 - (std::abs(diffVec.x() + std::abs(diffVec.y()))));
-            }
-
-
-            return Linal::G2D::Vector(0, 0);
-        }
-
-        Linal::G2D::Vector GetAlignmentVec(std::vector< board_piece*> _board_pieces) {
-            auto loc = location();
-            auto vec = Linal::G2D::Vector(loc.x(), loc.y());
-
-            int sumCount = 0;
-            Linal::G2D::Vector vecSum;
-            for (auto bp : _board_pieces)
-            {
-                if (auto bunny = dynamic_cast<kmint::Old*>(bp))
-                {
-                    if (bunny->hasDied()) continue;
-
-                    auto targetLoc = bunny->location();
-                    if (targetLoc.x() == loc.x() && targetLoc.y() == loc.y())
-                        continue;
-
-                    auto diff = (targetLoc - loc);
-                    if (std::abs(diff.x()) + std::abs(diff.y()) > 150)
-                        continue;
-
-                    vecSum = vecSum + bunny->GetVelocity();
-                    sumCount++;
-                }
-            }
-
-            if (sumCount > 0) {
-                vecSum = (vecSum / sumCount).GetUnitVector();
-                vecSum = vecSum + vec;
-
-                return vecSum;
-            }
-
-            return Linal::G2D::Vector(0, 0);
-        }
 
     public:
         bool isOnWater(std::vector< board_piece*> _board_pieces)
