@@ -15,32 +15,31 @@ Fan::Fan(point location, const image &i) : free_roaming_board_piece { location }
 
 void kmint::Fan::update(float dt, std::vector<board_piece *> &_board_pieces) {
     scanForNearbyFans(_board_pieces);
-    auto vec = Linal::G2D::Vector(0, 0);
 
     Linal::G2D::Vector cohesionVec { Linal::G2D::Vector{ 0 , 0 }};
     Linal::G2D::Vector alignmentVec { Linal::G2D::Vector{ 0 , 0 }};
     Linal::G2D::Vector separationVec { Linal::G2D::Vector{ 0 , 0 }};
 
     for (auto coh : cohesionForces) {
-        cohesionVec.x(cohesionVec.x() - coh.x());
-        cohesionVec.y(cohesionVec.y() - coh.y());
+        cohesionVec.x(cohesionVec.x() + coh.x());
+        cohesionVec.y(cohesionVec.y() + coh.y());
     }
 
     for (auto sep : separationForces) {
-        separationVec.x(separationVec.x() - sep.x());
-        separationVec.y(separationVec.y() - sep.y());
+        separationVec.x(separationVec.x() + sep.x());
+        separationVec.y(separationVec.y() + sep.y());
     }
 
     for (auto ali : alignmentForces) {
-        alignmentVec.x(alignmentVec.x() - ali.x());
-        alignmentVec.y(alignmentVec.y() - ali.y());
+        //alignmentVec.x(alignmentVec.x() + ali.x());
+        //alignmentVec.y(alignmentVec.y() + ali.y());
     }
 
-    cohesionVec = cohesionVec.GetUnitVector() * cohesion;
-    alignmentVec = alignmentVec.GetUnitVector() * alignment;
+    //cohesionVec = cohesionVec.GetUnitVector() * cohesion;
+    //alignmentVec = alignmentVec.GetUnitVector() * alignment;
     separationVec = separationVec.GetUnitVector() * separation;
 
-    vec = (cohesionVec + alignmentVec + separationVec + toAxel.GetUnitVector() + toAndre.GetUnitVector() + toFrans.GetUnitVector() + toJohnnie.GetUnitVector()).GetUnitVector();
+    auto vec = (cohesionVec + alignmentVec + separationVec + toAxel.GetUnitVector() + toAndre.GetUnitVector() + toFrans.GetUnitVector() + toJohnnie.GetUnitVector()).GetUnitVector();
     auto loc = location();
 
     auto newloc = kmint::point{ round(vec.x()) + loc.x(), round(vec.y()) + loc.y() };
@@ -77,15 +76,15 @@ void Fan::scanForNearbyFans(std::vector< board_piece*> &_board_pieces)
         {
             if (!fo->isAlive) continue; // Leave the dead alone
 
-            auto foLoc = fo->location();
-            auto dist = getCoordDifference(foLoc, fromLoc);
+            auto tarLoc = fo->location();
+            auto dist = getCoordDifference(tarLoc, fromLoc);
 
             if (cohesionActive && dist <= cohesionDistance) {
-                cohesionForces.push_back({fromLoc.x() - foLoc.x(), fromLoc.y() - foLoc.y()});
+                cohesionForces.push_back({tarLoc.x() - fromLoc.x(), tarLoc.y() - fromLoc.y()});
             }
 
             if (separationActive && dist <= separationDistance) {
-                separationForces.push_back({separationDistance - (fromLoc.x() - foLoc.x()), separationDistance - ( fromLoc.y() - foLoc.y())});
+                separationForces.push_back({separationDistance - (tarLoc.x() - fromLoc.x()), separationDistance - ( tarLoc.y() - fromLoc.y())});
             }
 
             if (alignmentActive && dist <= alignmentDistance) {

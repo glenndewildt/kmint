@@ -7,23 +7,23 @@
 
 #include <cmath>
 
-static int fansToSpawn { 100 };
+static int fansToSpawn { 2 };
 
-static bool attractedToAndreActive { true };
-static bool attractedToAxelActive { true };
-static bool attractedToFransActive { true };
-static bool attractedToJohnnieActive { true };
-static bool heresjohnniemode { true };
+static bool attractedToAndreActive { false };
+static bool attractedToAxelActive { false };
+static bool attractedToFransActive { false };
+static bool attractedToJohnnieActive { false };
+static bool heresjohnniemode { false };
 
 static double bandmemberDistance { 1000 };
 static double johnniedeadzone { 15 };
 static double cohesionDistance { 75 };
 static double alignmentDistance { 65 };
-static double separationDistance { 50 };
+static double separationDistance { 1500 };
 
 static bool cohesionActive { false };
 static bool alignmentActive { false };
-static bool separationActive { false };
+static bool separationActive { true };
 
 
 static double getCoordDifference(double x1, double y1, double x2, double y2) {
