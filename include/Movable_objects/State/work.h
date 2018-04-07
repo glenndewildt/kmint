@@ -29,7 +29,22 @@ namespace kmint{
 
 
         void check_state(std::vector< board_piece*> &_board_pieces, point my_location) {
+            if (dynamic_cast<kmint::bandlit *>(object)) {
 
+                kmint::bandlit *band = dynamic_cast<kmint::bandlit *>(object);
+               if(band->des_node_id != -1){
+
+                   if(counter > 2) {
+                       counter = 0;
+                       band->des_node_id = -1;
+                   }
+                   counter++;
+               }else{
+
+                       band->set_state("wandering");
+
+               }
+            }
 
         }
 
@@ -38,11 +53,16 @@ namespace kmint{
 
     void update() {
         std::cout<< "Work";
+        if (dynamic_cast<kmint::bandlit *>(object)) {
 
-        int bejaardenhuis= 120;
-        int bibliotheek = 624;
-        int cafe = 1377;
-        int poppoduim = 573;
+            kmint::bandlit *band = dynamic_cast<kmint::bandlit *>(object);
+            if(band->des_node_id != -1){
+                band->set_node_id(band->des_node_id);
+
+            }
+        }
+
+
 
     };
 

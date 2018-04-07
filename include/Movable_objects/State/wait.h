@@ -29,6 +29,7 @@ namespace kmint {
         wait(state_object *object) : counter{0}, object{object} {};
 
 
+
         void check_state(std::vector<board_piece *> &_board_pieces, point my_location) {
 
             if (dynamic_cast<kmint::bandlit *>(object)) {
@@ -40,7 +41,12 @@ namespace kmint {
                         kmint::Manager *man = dynamic_cast<kmint::Manager *>(bp);
                         if (man->get_node_id() == object->get_node_id()) {
                             std::cout << "manager is near appointment";
-                            object->set_state("work");
+                            band->des_node_id = 120;
+                            band->set_state("work");
+                            int bejaardenhuis= 120;
+                            int bibliotheek = 624;
+                            int cafe = 1377;
+                            int poppoduim = 573;
 
                         }
 
