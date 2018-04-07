@@ -35,15 +35,28 @@ namespace kmint {
                         if (dynamic_cast<Manager *>(bp)) {
 
                             kmint::Manager* man =dynamic_cast<kmint::Manager *>(bp);
-                            man->call_manager(1);
-                            object->set_state("wait");
+                            if(!man->is_busy){
+                                // call manager
+                                man->call_manager(1);
+                                // set state to wait for manager
+                                object->set_state("wait");
+                                std::cout<< "wait for manager ";
+
+
+                            }else{
+                                std::cout<< "Manager is busy";
+
+                            }
 
                         }
 
                     }                  //  object->set_state("sleep");
                 }else{
-                    band->money = band->money - 20;
-                    std::cout<< "money - 20 G";
+                    if(band->money >= 0){
+                        band->money = band->money - 20;
+                        std::cout<< "money - 20 G";
+                    }
+
 
                 }
 
@@ -71,7 +84,6 @@ namespace kmint {
                     if(node.id() == object->get_node_id()){
                         for(auto& edge : node){
                             for(auto& edge_node :edge.to()){
-                                std::cout << "edge id = "<< edge_node.to().id()<< std::endl;
 
                                 if(edge_node.to().id() != object->get_node_id()){
                                     node_ids.insert(std::pair<int, int>(edge_node.to().id(), edge.weight()));
