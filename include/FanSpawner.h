@@ -81,20 +81,62 @@ namespace kmint
                 std::default_random_engine gen(rand() % 10000);
                 std::uniform_int_distribution<int> pickAta(-1, 1), pickAtf(-1, 1), pickAtj(-1, 1), pickAtx(-1, 1), pickCoh(0, 1), pickSep(0, 1), pickAli(0, 1);
 
-                std::uniform_int_distribution<int> xCord(10, 12700); // it's not a bug it's a feature: precision
+                std::uniform_int_distribution<int> xCord(10, 1270); // it's not a bug it's a feature: precision
                 std::uniform_int_distribution<int> yCord(10, 690);
+
+                // TO WORK OUT//
+                std::vector<double> chromosomePool1 { 0, 0, 0, 0, 0, 0, 0 };//= { parrent1->getAttractionToAndre(), parrent1->getAttractionToFrans(), parrent1->getAttractionToJohnnie(), parrent1->getAttractionToAxel(), parrent1->getCohesion(), parrent1->getSeparation(), parrent1->getAlignment()};
+                std::vector<double> chromosomePool2 { 0, 0, 0, 0, 0, 0, 0 };//= { parrent2->getAttractionToAndre(), parrent2->getAttractionToFrans(), parrent2->getAttractionToJohnnie(), parrent2->getAttractionToAxel(), parrent2->getCohesion(), parrent2->getSeparation(), parrent2->getAlignment()};
+
+                std::vector<double> chromosomes {};
+
+                // Just make sure no mistake is made
+                if ( chromosomePool1.size() == chromosomePool2.size()) {
+                    std::uniform_int_distribution<int> splitPoint(0, chromosomePool1.size() - 1);
+
+                    bool splitStarted{false};
+
+                    std::vector<double>::iterator it;
+
+
+                    int index{0};
+                    int splitPointIndex = splitPoint(gen);
+
+                    for (it = chromosomePool1.begin(); it != chromosomePool1.end(); it++) {
+                        if (splitPointIndex < index)
+                            chromosomes.push_back(chromosomePool1[index]);
+                        else
+                            chromosomes.push_back(chromosomePool2[index]);
+
+                        index++;
+                    }
+                }
+                else
+                {
+                    // Code we should never reach but always make sure you have a backup plan
+                    chromosomes.push_back(pickAta(gen) ? parrent1->getAttractionToAndre() : parrent2->getAttractionToAndre());
+                    chromosomes.push_back(pickAtf(gen) ? parrent1->getAttractionToFrans() : parrent2->getAttractionToFrans());
+                    chromosomes.push_back(pickAtj(gen) ? parrent1->getAttractionToJohnnie() : parrent2->getAttractionToJohnnie());
+                    chromosomes.push_back(pickAtx(gen) ? parrent1->getAttractionToAxel() : parrent2->getAttractionToAxel());
+
+                    chromosomes.push_back(pickCoh(gen) ? parrent1->getCohesion() : parrent2->getCohesion());
+                    chromosomes.push_back(pickSep(gen) ? parrent1->getSeparation() : parrent2->getSeparation());
+                    chromosomes.push_back(pickAli(gen) ? parrent1->getAlignment() : parrent2->getAlignment());
+                }
+
+                // END of new stuff //
+
 
                 nextGen.push_back(new kmint::Fan{
                         kmint::point { xCord(gen), yCord(gen) },
                         kmint::image {"resources/xsfan.png", 1.0f},
-//
-//                        pickAta(gen) ? offSpring1->getAttractionToAndre() : offSpring2->getAttractionToAndre(),
-//                        pickAtf(gen) ? offSpring1->getAttractionToFrans() : offSpring2->getAttractionToFrans(),
-//                        pickAtj(gen) ? offSpring1->getAttractionToJohnnie() : offSpring2->getAttractionToJohnnie(),
-//                        pickAtx(gen) ? offSpring1->getAttractionToAxel() : offSpring2->getAttractionToAxel(),
-//                        pickCoh(gen) ? offSpring1->getCohesion() : offSpring2->getCohesion(),
-//                        pickSep(gen) ? offSpring1->getSeparation() : offSpring2->getSeparation(),
-//                        pickAli(gen) ? offSpring1->getAlignment() : offSpring2->getAlignment()
+                        chromosomes[0],
+                        chromosomes[1],
+                        chromosomes[2],
+                        chromosomes[3],
+                        chromosomes[4],
+                        chromosomes[5],
+                        chromosomes[6]
                 });
             }
 
