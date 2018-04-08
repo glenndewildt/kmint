@@ -18,6 +18,7 @@ namespace kmint {
     class Fan : public free_roaming_board_piece {
         image_drawable _drawable;
     public:
+
         Fan(point location, const image &i);
         Fan(point location, const image &i, double ata, double atf, double atj, double atx, double coh, double sep, double ali)
         : free_roaming_board_piece { location }, _drawable { *this,i }, ata(ata), atf(atf), atj(atj), atx(atx), cohesion(coh + 1), separation(sep + 1), alignment(ali + 1) {};

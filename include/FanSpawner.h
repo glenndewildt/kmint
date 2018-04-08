@@ -5,13 +5,17 @@
 #ifndef KMINTFRAMEWORK_BUNNYSPAWNER_H
 #define KMINTFRAMEWORK_BUNNYSPAWNER_H
 
+#include <algorithm>
 #include "Movable_objects/Fan/Fan.h"
 #include "globals.hpp"
 
 namespace kmint
 {
+
+
     class FanSpawner
     {
+
 
     private:
         std::vector<kmint::Fan*> currentFans;
@@ -71,8 +75,8 @@ namespace kmint
             nextGen.clear();
 
             while (nextGen.size() < fansToSpawn) {
-                auto offSpring1 = GetRandomOffSpring();
-                auto offSpring2 = GetRandomOffSpring();
+                auto parrent1 = GetRandomParrent();
+                auto parrent2 = GetRandomParrent();
 
                 std::default_random_engine gen(rand() % 10000);
                 std::uniform_int_distribution<int> pickAta(-1, 1), pickAtf(-1, 1), pickAtj(-1, 1), pickAtx(-1, 1), pickCoh(0, 1), pickSep(0, 1), pickAli(0, 1);
@@ -83,13 +87,14 @@ namespace kmint
                 nextGen.push_back(new kmint::Fan{
                         kmint::point { xCord(gen), yCord(gen) },
                         kmint::image {"resources/xsfan.png", 1.0f},
-                        pickAta(gen) ? offSpring1->getAttractionToAndre() : offSpring2->getAttractionToAndre(),
-                        pickAtf(gen) ? offSpring1->getAttractionToFrans() : offSpring2->getAttractionToFrans(),
-                        pickAtj(gen) ? offSpring1->getAttractionToJohnnie() : offSpring2->getAttractionToJohnnie(),
-                        pickAtx(gen) ? offSpring1->getAttractionToAxel() : offSpring2->getAttractionToAxel(),
-                        pickCoh(gen) ? offSpring1->getCohesion() : offSpring2->getCohesion(),
-                        pickSep(gen) ? offSpring1->getSeparation() : offSpring2->getSeparation(),
-                        pickAli(gen) ? offSpring1->getAlignment() : offSpring2->getAlignment()
+//
+//                        pickAta(gen) ? offSpring1->getAttractionToAndre() : offSpring2->getAttractionToAndre(),
+//                        pickAtf(gen) ? offSpring1->getAttractionToFrans() : offSpring2->getAttractionToFrans(),
+//                        pickAtj(gen) ? offSpring1->getAttractionToJohnnie() : offSpring2->getAttractionToJohnnie(),
+//                        pickAtx(gen) ? offSpring1->getAttractionToAxel() : offSpring2->getAttractionToAxel(),
+//                        pickCoh(gen) ? offSpring1->getCohesion() : offSpring2->getCohesion(),
+//                        pickSep(gen) ? offSpring1->getSeparation() : offSpring2->getSeparation(),
+//                        pickAli(gen) ? offSpring1->getAlignment() : offSpring2->getAlignment()
                 });
             }
 
@@ -121,6 +126,59 @@ namespace kmint
 
                     count++;
                 }
+            }
+
+        }
+
+//        bool sort_fan(const Fan* p1,const  Fan* p2) {
+//            return p1->GetFitness() < p2->GetFitness() ||
+//                   (p1->GetFitness() == p2->GetFitness());
+//        }
+        struct {
+            bool operator()(const Fan* p1, const Fan* p2) {
+                if(p1 != nullptr && p2 != nullptr){
+                    return p1->GetFitness() < p2->GetFitness() ||
+                           (p1->GetFitness() == p2->GetFitness());
+                }else{
+                    false;
+                }
+
+            }
+        } sort_fan;
+
+        kmint::Fan* GetRandomParrent()
+        {
+
+            for (int i = 0; i < 1; i++)
+            {
+                std::default_random_engine gen(rand() % 10000);
+               // std::sort(currentFans.begin(), currentFans.end(), sort_fan);
+            //TODO :: sort list
+                int counter = 0;
+                std::mt19937 rng;
+                rng.seed(std::random_device()());
+                std::uniform_int_distribution<std::mt19937::result_type> dist6(50,100);
+                int number = dist6(rng);
+                for(Fan* fan :currentFans){
+                    if(counter  == number){
+                        return fan;
+                    }
+                }
+
+//                auto it = currentFans.begin();
+//                int count = 0;
+//                for (auto b : currentFans) {
+//                    if (b->GetFitness() > fitEnough(gen)) {
+//                        return b;
+//                        //auto copyBunny(b);
+//                        //std::advance(it, count);
+//                        //currentBunnies.erase(it);
+//                        // TODO: Find a away to remove the bunny from the genPool after selection it as offspring. They dont have enough eggs and seeds for that!!
+//                        //return copyBunny;
+//                    }
+//
+//                    count++;
+//                }
             }
 
         }
@@ -170,6 +228,7 @@ namespace kmint
             ali = ali / selectedFitables;
         }
     };
+
 }
 
 #endif //KMINTFRAMEWORK_BUNNYSPAWNER_H
