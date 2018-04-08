@@ -48,6 +48,8 @@ namespace kmint {
 
         bool isAlive { true };
         const int GetFitness() const { return fitness; }
+        int fitness { 0 };
+
     private:
         void scanForNearbyFans(std::vector< board_piece*> &_board_pieces);
 
@@ -73,7 +75,6 @@ namespace kmint {
         double separation;
         double alignment;
 
-        int fitness { 0 };
     };
 }
 

@@ -6,8 +6,11 @@
 #define KMINTFRAMEWORK_BUNNYSPAWNER_H
 
 #include <algorithm>
+#include <set>
+#include <functional>
 #include "Movable_objects/Fan/Fan.h"
 #include "globals.hpp"
+#include <list>
 
 namespace kmint
 {
@@ -18,7 +21,10 @@ namespace kmint
 
 
     private:
-        std::vector<kmint::Fan*> currentFans;
+
+
+        std::list<kmint::Fan*> currentFans;
+        std::vector<kmint::board_piece*> _boardPieces;
         double ata = 0; // storaged average of attraction to bandlid where fitness is equal or higher to fitness average
         double atf = 0; // storaged average of attraction to bandlid where fitness is equal or higher to fitness average
         double atj = 0; // storaged average of attraction to bandlid where fitness is equal or higher to fitness average
@@ -34,6 +40,7 @@ namespace kmint
         int minFitness = 0;
     public:
         FanSpawner(std::vector<kmint::board_piece*> _boardPieces) {
+
             for (auto bp : _boardPieces)
                 if (dynamic_cast<kmint::Fan*>(bp))
                     currentFans.push_back(dynamic_cast<kmint::Fan*>(bp));
@@ -152,6 +159,10 @@ namespace kmint
             for (int i = 0; i < 1; i++)
             {
                 std::default_random_engine gen(rand() % 10000);
+
+                for (auto bp : _boardPieces)
+                    if (dynamic_cast<kmint::Fan*>(bp))
+                        currentFans.push_back(dynamic_cast<kmint::Fan*>(bp));
                 std::uniform_int_distribution<int> fitEnough(minFitness, maxFitness);
 
                 auto it = currentFans.begin();
@@ -178,9 +189,9 @@ namespace kmint
 //        }
         struct {
             bool operator()(const Fan* p1, const Fan* p2) {
-                if(p1 != nullptr && p2 != nullptr){
-                    return p1->GetFitness() < p2->GetFitness() ||
-                           (p1->GetFitness() == p2->GetFitness());
+                if(p1 != NULL && p2 != NULL){
+                    return p1->fitness < p2->fitness ||
+                           (p1->fitness == p2->fitness);
                 }else{
                     false;
                 }
@@ -194,17 +205,26 @@ namespace kmint
             for (int i = 0; i < 1; i++)
             {
                 std::default_random_engine gen(rand() % 10000);
-               // std::sort(currentFans.begin(), currentFans.end(), sort_fan);
             //TODO :: sort list
+
+
+
+            currentFans.sort(sort_fan);
+
+            std::list<Fan*> fans = currentFans;
+            for(Fan* fan : fans){
+                Fan* fan1 = fan;
+            }
                 int counter = 0;
                 std::mt19937 rng;
                 rng.seed(std::random_device()());
-                std::uniform_int_distribution<std::mt19937::result_type> dist6(50,100);
+                std::uniform_int_distribution<std::mt19937::result_type> dist6(49,99);
                 int number = dist6(rng);
                 for(Fan* fan :currentFans){
                     if(counter  == number){
                         return fan;
                     }
+                    counter++;
                 }
 
 //                auto it = currentFans.begin();
