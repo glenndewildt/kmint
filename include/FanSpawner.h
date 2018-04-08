@@ -77,22 +77,19 @@ namespace kmint
                 std::default_random_engine gen(rand() % 10000);
                 std::uniform_int_distribution<int> pickAta(-1, 1), pickAtf(-1, 1), pickAtj(-1, 1), pickAtx(-1, 1), pickCoh(0, 1), pickSep(0, 1), pickAli(0, 1);
 
-                std::uniform_int_distribution<int> xCord(10, 12700);
+                std::uniform_int_distribution<int> xCord(10, 12700); // it's not a bug it's a feature: precision
                 std::uniform_int_distribution<int> yCord(10, 690);
 
                 nextGen.push_back(new kmint::Fan{
                         kmint::point { xCord(gen), yCord(gen) },
                         kmint::image {"resources/xsfan.png", 1.0f},
-                        -0.75,
-                        0.85,
-                        -0.35,
-                        0.6,
-                        0,
-                        0.35,
-                        0.25,
-                        //pickCoh(gen) ? offSpring1->GetCohesion() : offSpring2->GetCohesion(),
-                        //pickSep(gen) ? offSpring1->GetSeparation() : offSpring2->GetSeparation(),
-                        //pickAli(gen) ? offSpring1->GetAlignment() : offSpring2->GetAlignment()
+                        pickAta(gen) ? offSpring1->getAttractionToAndre() : offSpring2->getAttractionToAndre(),
+                        pickAtf(gen) ? offSpring1->getAttractionToFrans() : offSpring2->getAttractionToFrans(),
+                        pickAtj(gen) ? offSpring1->getAttractionToJohnnie() : offSpring2->getAttractionToJohnnie(),
+                        pickAtx(gen) ? offSpring1->getAttractionToAxel() : offSpring2->getAttractionToAxel(),
+                        pickCoh(gen) ? offSpring1->getCohesion() : offSpring2->getCohesion(),
+                        pickSep(gen) ? offSpring1->getSeparation() : offSpring2->getSeparation(),
+                        pickAli(gen) ? offSpring1->getAlignment() : offSpring2->getAlignment()
                 });
             }
 
